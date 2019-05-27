@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+
+    <color name="color_E6FCFC">#E6FCFC</color>
+    <color name="color_E6FBFD">#E6FBFD</color>
+    <color name="color_E5FAFE">#E5FAFE</color>
+    <color name="color_E5F9FE">#E5F9FE</color>
+
+    <color name="color_E16002">#E16002</color>
+    <color name="color_CC000000">#CC000000</color>
+    <color name="color_9FCA2A">#9FCA2A</color>
+    <color name="transparent">#00000000</color>
+    <color name="color_66C4C4C4">#66C4C4C4</color>
+    <color name="color_E8E8E8">#E8E8E8</color>
+    <color name="color_323C45">#323C45</color>
+    <color name="color_222235">#222235</color>
+    <color name="color_121D27">#121D27</color>
+    <color name="color_100E23">#100E23</color>
+    <color name="color_0D1B24">#0D1B24</color>
+    <color name="color_999FCA2A">#999FCA2A</color>
+    <color name="black">#000000</color>
+
+    <color name="cardShadowColor_8">#2dE9BD7A</color>
+    <color name="color_77B7B7B">#7B7B7B</color>
+    <color name="color_33000000">#33000000</color>
+    <color name="color_96FFFFFF">#96FFFFFF</color>
+    <color name="color_2A2A2A">#2A2A2A</color>
+    <color name="color_414141">#414141</color>
+    <color name="color_C4C4C4">#C4C4C4</color>
+    <color name="color_1AFFFFFF">#1AFFFFFF</color>
+    <color name="color_33FFFFFF">#33FFFFFF</color>
+    <color name="color_9FC929">#9FC929</color>
+    <color name="color_666666">#666666</color>
+    <color name="color_1A000000">#1A000000</color>
+    <color name="color_80FFFFFF">#80FFFFFF</color>
+    <color name="color_66000000">#66000000</color>
+    <color name="color_E5A14B">#E5A14B</color>
+    <color name="color_D4D4D4">#D4D4D4</color>
+    <color name="color_99FFFFFF">#99FFFFFF</color>
+</resources>
