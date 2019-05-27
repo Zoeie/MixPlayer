@@ -1,0 +1,2 @@
+# MixPlayer
+集成MediaPlayer、IJKPlayer以及Exo等简单功能的播放器混合
