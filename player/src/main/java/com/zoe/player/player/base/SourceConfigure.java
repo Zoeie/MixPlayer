@@ -40,4 +40,8 @@ public class SourceConfigure {
     public boolean isCache() {
         return cache;
     }
+
+    public void setPlayUrl(String playUrl) {
+        this.playUrl = playUrl;
+    }
 }
