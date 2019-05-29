@@ -145,7 +145,7 @@ public class IJKPlayerPlayer implements Player, SurfaceHolder.Callback, Subtitle
                 if (mPlayListener != null) {
                     mPlayListener.onPlayError(what);
                 }
-                return false;
+                return true;
             }
         });
         player.setOnInfoListener(new IMediaPlayer.OnInfoListener() {
