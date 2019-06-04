@@ -40,7 +40,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        private static final String VIDEO_URL = Environment.getExternalStorageDirectory()+ File.separator+"testData"+File.separator+"testdata.m3u8";;
 //    private static final String VIDEO_URL = "http://10.11.89.80:8080/ts/media-playlist-test.m3u8";;
 //        private static final String VIDEO_URL = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
-    private static final String VIDEO_URL = "https://cdn.letv-cdn.com/2018/12/20/n4s9XBjHUVWz7Bsh/playlist.m3u8";
+//    private static final String VIDEO_URL = "https://cdn.letv-cdn.com/2018/12/20/n4s9XBjHUVWz7Bsh/playlist.m3u8";//ijk测试https
+    private static final String VIDEO_URL = "http://gz.long.tv:1977/live2/10.20.63.67:1977/live/afc.m3u8";//加密资源
     private static final String SUBTITLE_URL = "http://lemmovie.com/haiwang.srt";
     private MySeekBar seekBar;
     private TextView            tvPassTime;
@@ -170,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onSubtitleChanged(SubtitleData subtitle) {
                 LogUtil.d("onSubtitleChanged");
             }
-        }, PlayConstant.IJK_PLAYER, new PlayConfigure(surfaceView));
+        }, PlayConstant.EXO_PLAYER, new PlayConfigure(surfaceView));
         SourceConfigure configure = new SourceConfigure(VIDEO_URL,null);
         iPlayer.play(configure);
     }

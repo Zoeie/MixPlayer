@@ -212,12 +212,28 @@ public class CustomDataSource implements DataSource {
         String ts = dataSpec.uri.toString();
         DataSpec myDataSpec=null;
         if (!TextUtils.isEmpty(ts)&&!ts.contains(".m3u8")){
-            if (!ts.contains(".ts")){//加密数据
-                String lastPathSegment = dataSpec.uri.getLastPathSegment();
+            String lastPathSegment = dataSpec.uri.getLastPathSegment();
+            if (!ts.contains(".ts")&&dataSpec.uri!=null){//加密数据
                 String result = M3u8ParseUtil.parse(lastPathSegment);
-                myDataSpec = new DataSpec(Uri.parse(result));
-            } else {
-                //非加密数据
+                if (result.startsWith("..")){//ts流的链接为相对路径
+                    String relativePath = result.replaceFirst("..", "");
+                    String newPath = dataSpec.uri.getScheme() + "://" + dataSpec.uri.getHost()+":" + dataSpec.uri.getPort()+relativePath;
+                    myDataSpec = new DataSpec(Uri.parse(newPath));
+                    android.util.Log.d(TAG, "open: encrypt data---relativePath---newPath:"+newPath);
+                }else{//绝对路径
+                    myDataSpec = new DataSpec(Uri.parse(result));
+                    android.util.Log.d(TAG, "open: absolutePath");
+                }
+            } else {//非加密数据
+                android.util.Log.d(TAG, "open: general data："+ts);
+                /*if (lastPathSegment.startsWith("..")){//ts流的链接为相对路径
+                    String relativePath = lastPathSegment.replaceFirst("..", "");
+                    String newPath = dataSpec.uri.getScheme() + "://" + dataSpec.uri.getHost()+":" + dataSpec.uri.getPort()+relativePath;
+                    myDataSpec = new DataSpec(Uri.parse(newPath));
+                    android.util.Log.d(TAG, "open: general data---relativePath---newPath:"+newPath);
+                }else{//绝对路径
+                    android.util.Log.d(TAG, "open: general data---absolutePath");
+                }*/
             }
         }
 
