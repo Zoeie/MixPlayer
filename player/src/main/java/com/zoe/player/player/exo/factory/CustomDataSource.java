@@ -224,16 +224,9 @@ public class CustomDataSource implements DataSource {
                     myDataSpec = new DataSpec(Uri.parse(result));
                     android.util.Log.d(TAG, "open: absolutePath");
                 }
-            } else {//非加密数据
+            } else {//非加密数据，ts流的链接为相对路径时播放器会自动拼接好回调到这边
                 android.util.Log.d(TAG, "open: general data："+ts);
-                /*if (lastPathSegment.startsWith("..")){//ts流的链接为相对路径
-                    String relativePath = lastPathSegment.replaceFirst("..", "");
-                    String newPath = dataSpec.uri.getScheme() + "://" + dataSpec.uri.getHost()+":" + dataSpec.uri.getPort()+relativePath;
-                    myDataSpec = new DataSpec(Uri.parse(newPath));
-                    android.util.Log.d(TAG, "open: general data---relativePath---newPath:"+newPath);
-                }else{//绝对路径
-                    android.util.Log.d(TAG, "open: general data---absolutePath");
-                }*/
+
             }
         }
 

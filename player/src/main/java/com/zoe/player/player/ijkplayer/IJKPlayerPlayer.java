@@ -102,6 +102,7 @@ public class IJKPlayerPlayer implements Player, SurfaceHolder.Callback, Subtitle
         player.setOnPreparedListener(new IMediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(IMediaPlayer iMediaPlayer) {
+                Log.d(TAG, "onPrepared: ");
                 if(mPlayListener != null) {
                     mPlayListener.onPlayPrepared();
                 }
@@ -125,6 +126,7 @@ public class IJKPlayerPlayer implements Player, SurfaceHolder.Callback, Subtitle
         player.setOnSeekCompleteListener(new IMediaPlayer.OnSeekCompleteListener() {
             @Override
             public void onSeekComplete(IMediaPlayer iMediaPlayer) {
+                Log.e(TAG, "onSeekComplete: " );
                 if(mPlayListener != null) {
                     mPlayListener.onSeekProcessed();
                 }
@@ -133,6 +135,7 @@ public class IJKPlayerPlayer implements Player, SurfaceHolder.Callback, Subtitle
         player.setOnCompletionListener(new IMediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(IMediaPlayer iMediaPlayer) {
+                Log.d(TAG, "onCompletion: ");
                 if(mPlayListener != null) {
                     mPlayListener.onPlayEnd();
                 }
