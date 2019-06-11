@@ -19,6 +19,8 @@ import com.zoe.player.player.mediaplayer.MediaPlayerFactory;
 public class PlayManager implements IPlayerManager {
 
     private static PlayManager manager;
+    private int mPlayerType=PlayConstant.IJK_PLAYER;
+
 
     private PlayManager() {
     }
@@ -32,6 +34,7 @@ public class PlayManager implements IPlayerManager {
 
     @Override
     public Player buildPlayer(Context context, PlayListener listener, int type, PlayConfigure configure) {
+        this.mPlayerType=type;
         IPlayerFactory factory = new IJKPlayerFactory(); //默认为IJK
         if (type == PlayConstant.EXO_PLAYER) {
             factory = new ExoPlayerFactory();
@@ -41,6 +44,14 @@ public class PlayManager implements IPlayerManager {
             factory = new IJKPlayerFactory();
         }
         return factory.getPlayer(context, listener, configure);
+    }
+
+    /**
+     * 获取当前播放器的type
+     * @return
+     */
+    public int getPlayerType() {
+        return mPlayerType;
     }
 
 }

@@ -13,6 +13,12 @@ public class SourceConfigure {
 
     private String subtitleUrl = "";//字幕链接
 
+    /**
+     * 起始播放位置,ms值，只针对exoplayer起作用
+     * 主要是为了处理exoplayer再prepare之后才调用seek会先显示资源的第一帧的问题
+     */
+    private int startPosition=0;
+
     public SourceConfigure(String playUrl) {
         this.playUrl = playUrl;
     }
@@ -43,5 +49,13 @@ public class SourceConfigure {
 
     public void setPlayUrl(String playUrl) {
         this.playUrl = playUrl;
+    }
+
+    public void setStartPosition(int startPosition) {
+        this.startPosition = startPosition;
+    }
+
+    public int getStartPosition() {
+        return startPosition;
     }
 }

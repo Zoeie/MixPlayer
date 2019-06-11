@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onSubtitleChanged(SubtitleData subtitle) {
                 LogUtil.d("onSubtitleChanged");
             }
-        }, PlayConstant.IJK_PLAYER, new PlayConfigure(surfaceView));
+        }, PlayConstant.MEDIA_PLAYER, new PlayConfigure(surfaceView));
         SourceConfigure configure = new SourceConfigure(VIDEO_URL);
         iPlayer.play(configure);
     }
