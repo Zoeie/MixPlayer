@@ -43,8 +43,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //    private static final String VIDEO_URL = "https://cdn.letv-cdn.com/2018/12/20/n4s9XBjHUVWz7Bsh/playlist.m3u8";//ijk测试https
 //    private static final String VIDEO_URL = "http://gz.long.tv:1977/live2/10.20.63.67:1977/live/afc.m3u8";//加密资源,ts解密后为相对路径
 //    private static final String VIDEO_URL = "https://zy.512wx.com/20171130/EI2p4dYT/index.m3u8";
-    private static final String VIDEO_URL = "https://www4.yuboyun.com/hls/2019/03/14/WXdumQWk/playlist.m3u8";
-    private static final String SUBTITLE_URL = "http://lemmovie.com/haiwang.srt";
+    private static final String VIDEO_URL = "http://yfvod.lemmovie.com/vod/437332CF8EA1444B8A06FB923CEC9FDC/master.m3u8?pt=0";
+    private static final String SUBTITLE_URL = "http://sub-title.lemmovie.com/sub/2019-4/haiwang.2M_cn.srt";
     private MySeekBar seekBar;
     private TextView            tvPassTime;
     private TextView            tvBufferTime;
@@ -173,8 +173,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onSubtitleChanged(SubtitleData subtitle) {
                 LogUtil.d("onSubtitleChanged");
             }
-        }, PlayConstant.MEDIA_PLAYER, new PlayConfigure(surfaceView));
-        SourceConfigure configure = new SourceConfigure(VIDEO_URL);
+        }, PlayConstant.EXO_PLAYER, new PlayConfigure(surfaceView));
+        SourceConfigure configure = new SourceConfigure(VIDEO_URL,SUBTITLE_URL);
         iPlayer.play(configure);
     }
 

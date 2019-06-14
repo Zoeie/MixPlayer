@@ -295,7 +295,7 @@ public class MediaPlayerPlayer implements Player, SurfaceHolder.Callback, MediaP
             }
             return;
         }
-        SubtitleData data = new SubtitleData(0, subtitle.content);
+        SubtitleData data = new SubtitleData(subtitle.content);
         if (mPlayListener != null) {
             mPlayListener.onSubtitleChanged(data);
         }

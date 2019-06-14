@@ -196,7 +196,11 @@ public class ExoPlayer implements Player {
         public void onCues(List<Cue> cues) {
             if (cues != null && cues.size() > 0) {
                 if (mPlayListener != null) {
-                    SubtitleData data = new SubtitleData(0,cues.get(0).text.toString());
+                    Cue cue = cues.get(0);
+                    int lineAnchor = cue.lineAnchor;
+                    int positionAnchor = cue.positionAnchor;
+                    String text = cue.text.toString();
+                    SubtitleData data = new SubtitleData(lineAnchor, positionAnchor, text);
                     mPlayListener.onSubtitleChanged(data);
                 }
             } else {

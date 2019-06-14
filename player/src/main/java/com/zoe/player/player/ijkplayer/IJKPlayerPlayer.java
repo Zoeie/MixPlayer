@@ -430,7 +430,7 @@ public class IJKPlayerPlayer implements Player, SurfaceHolder.Callback, Subtitle
             }
             return;
         }
-        SubtitleData data = new SubtitleData(0, subtitle.content);
+        SubtitleData data = new SubtitleData(subtitle.content);
         if (mPlayListener != null) {
             mPlayListener.onSubtitleChanged(data);
         }
