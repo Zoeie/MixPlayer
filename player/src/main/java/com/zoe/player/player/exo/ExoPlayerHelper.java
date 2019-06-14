@@ -38,10 +38,9 @@ public class ExoPlayerHelper {
         DefaultRenderersFactory factory = new DefaultRenderersFactory(context);
         //2.创建ExoPlayer
         SimpleExoPlayer exoPlayer = ExoPlayerFactory.newSimpleInstance(context,factory, trackSelector, loadControl);
-        exoPlayer.setVideoSurfaceView(configure.getSurfaceView());
         //主页解决切换SurfaceView  因为MediaCodec一定要关联一个SurfaceView,在Attach/Detach时，SurfaceView会销毁再创建
         //方式一：禁用或者开启，渲染的方式
-        //configure.getSurfaceView().getHolder().addCallback(new SurfaceManager1(exoPlayer,trackSelector));
+        configure.getSurfaceView().getHolder().addCallback(new SurfaceManager1(exoPlayer,trackSelector));
         //方式二：在SurfaceView进行销毁再创建时，给MediaCodec一个DummySurface，防止出错。 暂不生效(ExoPlayer issue#2703 #677)
         //configure.getSurfaceView().getHolder().addCallback(new SurfaceManager2(exoPlayer, context));
         return exoPlayer;
