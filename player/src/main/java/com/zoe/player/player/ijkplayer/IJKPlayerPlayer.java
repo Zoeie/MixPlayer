@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.zoe.player.player.PlayConstant;
 import com.zoe.player.player.base.PlayListener;
 import com.zoe.player.player.base.Player;
 import com.zoe.player.player.base.SourceConfigure;
@@ -400,9 +401,9 @@ public class IJKPlayerPlayer implements Player, SurfaceHolder.Callback, Subtitle
         long position = ijkMediaPlayer == null ? 0 : ijkMediaPlayer.getCurrentPosition();
         // Remove scheduled updates.
         handler.removeCallbacks(progressAction);
-        long delayMs = 1000 - (position % 1000);
+        long delayMs = PlayConstant.PROGRESS_INTERVAL - (position % PlayConstant.PROGRESS_INTERVAL);
         if (delayMs < 200) {
-            delayMs += 1000;
+            delayMs += PlayConstant.PROGRESS_INTERVAL;
         }
         if (mPlayListener != null) {
             mPlayListener.onProgress();

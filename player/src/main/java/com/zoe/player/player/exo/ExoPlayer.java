@@ -33,6 +33,7 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.MimeTypes;
 import com.google.android.exoplayer2.util.Util;
 import com.google.android.exoplayer2.video.VideoListener;
+import com.zoe.player.player.PlayConstant;
 import com.zoe.player.player.base.PlayListener;
 import com.zoe.player.player.base.Player;
 import com.zoe.player.player.base.SourceConfigure;
@@ -350,6 +351,7 @@ public class ExoPlayer implements Player {
         if (exoPlayer != null) {
             exoPlayer.stop();
             exoPlayer.release();
+            exoPlayer = null;
         }
         handler.removeCallbacks(progressAction);
     }
@@ -444,12 +446,12 @@ public class ExoPlayer implements Player {
         if (playbackState != com.google.android.exoplayer2.Player.STATE_IDLE && playbackState != com.google.android.exoplayer2.Player.STATE_ENDED) {
             long delayMs;
             if (exoPlayer.getPlayWhenReady() && playbackState == com.google.android.exoplayer2.Player.STATE_READY) {
-                delayMs = 1000 - (position % 1000);
+                delayMs = PlayConstant.PROGRESS_INTERVAL - (position % PlayConstant.PROGRESS_INTERVAL);
                 if (delayMs < 200) {
-                    delayMs += 1000;
+                    delayMs += PlayConstant.PROGRESS_INTERVAL;
                 }
             } else {
-                delayMs = 1000;
+                delayMs = PlayConstant.PROGRESS_INTERVAL;
             }
             if (mPlayListener != null) {
                 mPlayListener.onProgress();
