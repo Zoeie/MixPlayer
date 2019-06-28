@@ -113,8 +113,10 @@ public class IJKPlayerPlayer implements Player, SurfaceHolder.Callback, Subtitle
         });
         player.setOnVideoSizeChangedListener(new IMediaPlayer.OnVideoSizeChangedListener() {
             @Override
-            public void onVideoSizeChanged(IMediaPlayer iMediaPlayer, int i, int i1, int i2, int i3) {
-
+            public void onVideoSizeChanged(IMediaPlayer mp, int width, int height, int sar_num, int sar_den) {
+                if(mPlayListener != null) {
+                    mPlayListener.onVideoSizeChanged(width, height);
+                }
             }
         });
         player.setOnBufferingUpdateListener(new IMediaPlayer.OnBufferingUpdateListener() {

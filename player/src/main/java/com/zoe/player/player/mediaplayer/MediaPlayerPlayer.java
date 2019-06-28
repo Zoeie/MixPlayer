@@ -24,7 +24,7 @@ import java.util.List;
 
 import androidx.annotation.Nullable;
 
-public class MediaPlayerPlayer implements Player, SurfaceHolder.Callback, MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnInfoListener, MediaPlayer.OnSeekCompleteListener, MediaPlayer.OnCompletionListener, SubtitleEngine.OnSubtitleChangeListener, SubtitleEngine.OnSubtitlePreparedListener {
+public class MediaPlayerPlayer implements Player, SurfaceHolder.Callback, MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnInfoListener, MediaPlayer.OnSeekCompleteListener, MediaPlayer.OnCompletionListener, SubtitleEngine.OnSubtitleChangeListener, SubtitleEngine.OnSubtitlePreparedListener, MediaPlayer.OnVideoSizeChangedListener {
 
     private static final String TAG = "MediaPlayerPlayer";
     private Context mContext;
@@ -72,6 +72,7 @@ public class MediaPlayerPlayer implements Player, SurfaceHolder.Callback, MediaP
         mMediaPlayer.setOnErrorListener(this);
         mMediaPlayer.setOnBufferingUpdateListener(this);
         mMediaPlayer.setOnInfoListener(this);
+        mMediaPlayer.setOnVideoSizeChangedListener(this);
         mMediaPlayer.setOnSeekCompleteListener(this);
         mMediaPlayer.setOnCompletionListener(this);
         mMediaPlayer.setScreenOnWhilePlaying(true);
@@ -173,7 +174,7 @@ public class MediaPlayerPlayer implements Player, SurfaceHolder.Callback, MediaP
     @Override
     public VideoFormat getVideoFormat() {
         VideoFormat videoFormat = new VideoFormat();
-        if(mMediaPlayer != null) {
+        if(mMediaPlayer == null) {
             return videoFormat;
         }
         videoFormat.videoWidth = getVideoWidth();
@@ -182,10 +183,16 @@ public class MediaPlayerPlayer implements Player, SurfaceHolder.Callback, MediaP
         if(trackInfo != null && trackInfo.length > 0) {
             for (MediaPlayer.TrackInfo track : trackInfo) {
                 if (track.getTrackType() == MediaPlayer.TrackInfo.MEDIA_TRACK_TYPE_VIDEO) {
-                    MediaFormat format = track.getFormat();
+                    MediaFormat format = null;
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+                        format = track.getFormat();
+                    }
+                    if(format == null) return videoFormat;
                     int tileW = format.getInteger(MediaFormat.KEY_TILE_WIDTH);
                     int tileH = format.getInteger(MediaFormat.KEY_TILE_HEIGHT);
-                    //TODO 获取format数据
+                    videoFormat.videoWidth = tileW;
+                    videoFormat.videoHeight = tileH;
+                    return videoFormat;
                 }
             }
         }
@@ -305,6 +312,13 @@ public class MediaPlayerPlayer implements Player, SurfaceHolder.Callback, MediaP
     public void onSubtitlePrepared(@Nullable List<Subtitle> subtitles) {
         if(mSubtitleEngine != null) {
             mSubtitleEngine.start();
+        }
+    }
+
+    @Override
+    public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
+        if(mPlayListener != null) {
+            mPlayListener.onVideoSizeChanged(width, height);
         }
     }
 }

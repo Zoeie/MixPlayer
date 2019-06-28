@@ -214,7 +214,9 @@ public class ExoPlayer implements Player {
     private VideoListener videoListener = new VideoListener() {
         @Override
         public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
-
+            if(mPlayListener != null) {
+                mPlayListener.onVideoSizeChanged(width, height);
+            }
         }
 
         @Override

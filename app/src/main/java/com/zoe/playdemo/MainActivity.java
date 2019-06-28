@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //    private static final String VIDEO_URL = "http://gz.long.tv:1977/live2/10.20.63.67:1977/live/afc.m3u8";//加密资源,ts解密后为相对路径
 //    private static final String VIDEO_URL = "https://zy.512wx.com/20171130/EI2p4dYT/index.m3u8";
     private static final String VIDEO_URL = "http://yfvod.lemmovie.com/vod/437332CF8EA1444B8A06FB923CEC9FDC/master.m3u8?pt=0";
-    private static final String SUBTITLE_URL = "http://sub-title.lemmovie.com/sub/2019-4/haiwang.2M_cn.srt";
+    private static final String SUBTITLE_URL = "";
     private MySeekBar seekBar;
     private TextView            tvPassTime;
     private TextView            tvBufferTime;
@@ -172,6 +172,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onSubtitleChanged(SubtitleData subtitle) {
                 LogUtil.d("onSubtitleChanged");
+            }
+
+            @Override
+            public void onVideoSizeChanged(int width, int height) {
+
             }
         }, PlayConstant.EXO_PLAYER, new PlayConfigure(surfaceView));
         SourceConfigure configure = new SourceConfigure(VIDEO_URL,SUBTITLE_URL);

@@ -33,4 +33,7 @@ public interface PlayListener {
 
     //字幕变更
     void onSubtitleChanged(SubtitleData subtitle);
+
+    //视频宽高
+    void onVideoSizeChanged(int width, int height);
 }
