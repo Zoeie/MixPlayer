@@ -63,15 +63,15 @@ public class CacheManager {
         return mCache;
     }
 
-    public boolean hasCache() {
-        return resolveCacheState(mCache, url);
-    }
+//    public boolean hasCache() {
+//        return resolveCacheState(mCache, url);
+//    }
 
-    public void release() {
-        if (mCache != null) {
-            mCache.release();
-        }
-    }
+//    public void release() {
+//        if (mCache != null) {
+//            mCache.release();
+//        }
+//    }
 
 
     /**
@@ -103,28 +103,28 @@ public class CacheManager {
      *
      * @param cache
      */
-    private static boolean resolveCacheState(Cache cache, String url) {
-        boolean isCache = true;
-        if (!TextUtils.isEmpty(url)) {
-            String key = CacheUtil.generateKey(Uri.parse(url));
-            if (!TextUtils.isEmpty(key)) {
-                NavigableSet<CacheSpan> cachedSpans = cache.getCachedSpans(key);
-                if (cachedSpans.size() == 0) {
-                    isCache = false;
-                } else {
-                    long contentLength = ContentMetadata.getContentLength(cache.getContentMetadata(key));
-                    ;
-                    long currentLength = 0;
-                    for (CacheSpan cachedSpan : cachedSpans) {
-                        currentLength += cache.getCachedLength(key, cachedSpan.position, cachedSpan.length);
-                    }
-                    isCache = currentLength >= contentLength;
-                }
-            } else {
-                isCache = false;
-            }
-        }
-        return isCache;
-    }
+//    private static boolean resolveCacheState(Cache cache, String url) {
+//        boolean isCache = true;
+//        if (!TextUtils.isEmpty(url)) {
+//            String key = CacheUtil.generateKey(Uri.parse(url));
+//            if (!TextUtils.isEmpty(key)) {
+//                NavigableSet<CacheSpan> cachedSpans = cache.getCachedSpans(key);
+//                if (cachedSpans.size() == 0) {
+//                    isCache = false;
+//                } else {
+//                    long contentLength = ContentMetadata.getContentLength(cache.getContentMetadata(key));
+//                    ;
+//                    long currentLength = 0;
+//                    for (CacheSpan cachedSpan : cachedSpans) {
+//                        currentLength += cache.getCachedLength(key, cachedSpan.position, cachedSpan.length);
+//                    }
+//                    isCache = currentLength >= contentLength;
+//                }
+//            } else {
+//                isCache = false;
+//            }
+//        }
+//        return isCache;
+//    }
 
 }
