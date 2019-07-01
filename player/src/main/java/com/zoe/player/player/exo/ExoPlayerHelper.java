@@ -15,6 +15,16 @@ import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.video.DummySurface;
 
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
 /**
  * author zoe
  * created 2019/4/25 13:42
@@ -23,6 +33,7 @@ import com.google.android.exoplayer2.video.DummySurface;
 public class ExoPlayerHelper {
 
     public SimpleExoPlayer buildExoPlayer(Context context, ExoConfigure configure) {
+        handleSSLHandshake();
         //1. 创建一个默认的 TrackSelector
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
         TrackSelection.Factory videoTackSelectionFactory =
@@ -109,4 +120,39 @@ public class ExoPlayerHelper {
         }
 
     }
+
+    /**
+     * 处理https非CA证书信任问题
+     */
+    private void handleSSLHandshake() {
+        try {
+            TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
+                public X509Certificate[] getAcceptedIssuers() {
+                    return new X509Certificate[0];
+                }
+
+                @Override
+                public void checkClientTrusted(X509Certificate[] certs, String authType) {
+                }
+
+                @Override
+                public void checkServerTrusted(X509Certificate[] certs, String authType) {
+                }
+            }};
+
+            SSLContext sc = SSLContext.getInstance("TLS");
+            // trustAllCerts信任所有的证书
+            sc.init(null, trustAllCerts, new SecureRandom());
+            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+            HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
+                @Override
+                public boolean verify(String hostname, SSLSession session) {
+                    return true;
+                }
+            });
+        } catch (Exception ignored) {
+        }
+    }
+
+
 }
