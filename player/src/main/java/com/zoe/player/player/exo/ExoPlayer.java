@@ -182,9 +182,17 @@ public class ExoPlayer implements Player {
 
     @NonNull
     private MediaSource getMediaSource(String subtitleUrl) {
+        String mimeType;
+        if (subtitleUrl.endsWith(".srt")) {
+            mimeType = MimeTypes.APPLICATION_SUBRIP;
+        } else if (subtitleUrl.endsWith(".ass") || subtitleUrl.endsWith(".ssa")) {
+            mimeType = MimeTypes.TEXT_SSA;
+        } else {
+            mimeType = MimeTypes.APPLICATION_SUBRIP;
+        }
         Format subtitleFormat = Format.createTextSampleFormat(
                 null, // An identifier for the track. May be null.
-                MimeTypes.APPLICATION_SUBRIP, // The mime type. Must be set correctly.
+                mimeType, // The mime type. Must be set correctly.
                 C.SELECTION_FLAG_DEFAULT, // Selection flags for the track.
                 null); // The subtitle language. May be null.
         DataSource.Factory factory = new DefaultDataSourceFactory(mContext, Util.getUserAgent(mContext, "subtitlePlayer"));
