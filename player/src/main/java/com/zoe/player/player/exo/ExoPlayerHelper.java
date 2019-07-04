@@ -13,6 +13,7 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.util.EventLogger;
 import com.google.android.exoplayer2.video.DummySurface;
 
 import java.security.SecureRandom;
@@ -49,6 +50,9 @@ public class ExoPlayerHelper {
         DefaultRenderersFactory factory = new DefaultRenderersFactory(context);
         //2.创建ExoPlayer
         SimpleExoPlayer exoPlayer = ExoPlayerFactory.newSimpleInstance(context,factory, trackSelector, loadControl);
+
+        //增加log日志分析
+        exoPlayer.addAnalyticsListener(new EventLogger(trackSelector));
         //主页解决切换SurfaceView  因为MediaCodec一定要关联一个SurfaceView,在Attach/Detach时，SurfaceView会销毁再创建
         //方式一：禁用或者开启，渲染的方式
         configure.getSurfaceView().getHolder().addCallback(new SurfaceManager1(exoPlayer,trackSelector));

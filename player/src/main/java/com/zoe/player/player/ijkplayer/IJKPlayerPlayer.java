@@ -90,6 +90,7 @@ public class IJKPlayerPlayer implements Player, SurfaceHolder.Callback, Subtitle
         //ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER,"reconnect",3); //播放重连次数
         //ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER,"packet-buffering",0); //开启/关闭 缓冲
         //ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER,"infbuf",1); //是否无限读
+//        player.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "dns_cache_clear", 1);//清空dns
 
         player.setVolume(1.0f, 1.0f);
         player.setScreenOnWhilePlaying(true);
