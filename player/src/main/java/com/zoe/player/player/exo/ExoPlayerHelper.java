@@ -47,7 +47,10 @@ public class ExoPlayerHelper {
                 DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_MS,
                 DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS)
                 .createDefaultLoadControl();
-        DefaultRenderersFactory factory = new DefaultRenderersFactory(context);
+        //EXTENSION_RENDERER_MODE_ON：MediaCodecAudioRenderer不支持的格式，使用FfmpegAudioRenderer来进行播放
+        //EXTENSION_RENDERER_MODE_PREFER:令FfmpegAudioRenderer的优先级高于MediaCodecAudioRenderer不支持的格式
+        //播放器默认支持拓展，当MediaCodecAudioRenderer不支持的格式，使用FfmpegAudioRenderer
+        DefaultRenderersFactory factory = new DefaultRenderersFactory(context, DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON);
         //2.创建ExoPlayer
         SimpleExoPlayer exoPlayer = ExoPlayerFactory.newSimpleInstance(context,factory, trackSelector, loadControl);
 
