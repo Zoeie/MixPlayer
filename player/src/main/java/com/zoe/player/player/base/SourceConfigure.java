@@ -1,5 +1,7 @@
 package com.zoe.player.player.base;
 
+import java.util.List;
+
 /**
  * author zoe
  * created 2019/4/25 14:08
@@ -11,36 +13,35 @@ public class SourceConfigure {
 
     private String playUrl;//当前的播放链接
 
-    private String subtitleUrl = "";//字幕链接
+    private List<String> subtitleList;//字幕链接
 
     /**
      * 起始播放位置,ms值，只针对exoplayer起作用
      * 主要是为了处理exoplayer再prepare之后才调用seek会先显示资源的第一帧的问题
      */
-    private int startPosition=0;
+    private int startPosition = 0;
 
     public SourceConfigure(String playUrl) {
         this.playUrl = playUrl;
     }
 
-    public SourceConfigure(String playUrl, String subtitleUrl) {
+    public SourceConfigure(String playUrl, List<String> subtitleList) {
         this.playUrl = playUrl;
-        this.subtitleUrl = subtitleUrl;
+        this.subtitleList = subtitleList;
     }
 
-
-    public SourceConfigure(boolean cache, String playUrl, String subtitleUrl) {
+    public SourceConfigure(boolean cache, String playUrl, List<String> subtitleList) {
         this.cache = cache;
         this.playUrl = playUrl;
-        this.subtitleUrl = subtitleUrl;
+        this.subtitleList = subtitleList;
     }
 
     public String getPlayUrl() {
         return playUrl;
     }
 
-    public String getSubtitleUrl() {
-        return subtitleUrl;
+    public List<String> getSubtitleList() {
+        return subtitleList;
     }
 
     public boolean isCache() {

@@ -12,6 +12,13 @@
         android:layout_height="wrap_content"
         android:text="测试播放器，小屏-大屏切换"/>
 
+    <Button
+        android:layout_below="@id/btn_screen_switch"
+        android:id="@+id/btn_subtitle_switch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="测试字幕切换"/>
+
     <SurfaceView
         android:id="@+id/surface_view"
         android:layout_width="200dp"

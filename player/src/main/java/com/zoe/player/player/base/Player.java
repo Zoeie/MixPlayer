@@ -47,4 +47,10 @@ public interface Player {
      * @return
      */
     SourceConfigure getCurrentPlayInfo();
+
+    /**
+     * 切换字幕
+     * @param index 需要切换字幕的索引
+     */
+    void switchSubtitle(int index);
 }

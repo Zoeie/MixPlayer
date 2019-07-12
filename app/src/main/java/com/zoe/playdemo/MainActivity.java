@@ -12,6 +12,8 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.zoe.playdemo.util.LogUtil;
 import com.zoe.playdemo.view.MySeekBar;
 import com.zoe.player.player.PlayConstant;
@@ -22,10 +24,10 @@ import com.zoe.player.player.base.Player;
 import com.zoe.player.player.base.SourceConfigure;
 import com.zoe.player.player.base.SubtitleData;
 
+import java.util.ArrayList;
 import java.util.Formatter;
+import java.util.List;
 import java.util.Locale;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -39,13 +41,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        private static final String VIDEO_URL = "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8";
 //        private static final String VIDEO_URL = Environment.getExternalStorageDirectory()+ File.separator+"testData"+File.separator+"testdata.m3u8";;
 //    private static final String VIDEO_URL = "http://10.11.89.80:8080/ts/media-playlist-test.m3u8";;
-//        private static final String VIDEO_URL = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
+        private static final String VIDEO_URL = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
 //    private static final String VIDEO_URL = "https://cdn.letv-cdn.com/2018/12/20/n4s9XBjHUVWz7Bsh/playlist.m3u8";//ijk测试https
 //    private static final String VIDEO_URL = "http://gz.long.tv:1977/live2/10.20.63.67:1977/live/afc.m3u8";//加密资源,ts解密后为相对路径
 //    private static final String VIDEO_URL = "https://zy.512wx.com/20171130/EI2p4dYT/index.m3u8";
 //    private static final String VIDEO_URL = "http://yfvod.lemmovie.com/vod/437332CF8EA1444B8A06FB923CEC9FDC/master.m3u8?pt=0";
-    private static final String VIDEO_URL = "https://www2.yuboyun.com/hls/2018/07/29/SqB3V9P4/playlist.m3u8";
-    private static final String SUBTITLE_URL = "";
+//    private static final String VIDEO_URL = "https://www2.yuboyun.com/hls/2018/07/29/SqB3V9P4/playlist.m3u8";
     private MySeekBar seekBar;
     private TextView            tvPassTime;
     private TextView            tvBufferTime;
@@ -64,6 +65,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Button btnSwitch = findViewById(R.id.btn_screen_switch);
         btnSwitch.setOnClickListener(this);
+
+        Button btnSubtitle = findViewById(R.id.btn_subtitle_switch);
+        btnSubtitle.setOnClickListener(this);
 
         Button btnPlay = findViewById(R.id.btn_pause);
         btnPlay.setOnClickListener(this);
@@ -180,7 +184,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         }, PlayConstant.EXO_PLAYER, new PlayConfigure(surfaceView));
-        SourceConfigure configure = new SourceConfigure(VIDEO_URL,SUBTITLE_URL);
+        List<String> subtitleList = new ArrayList<>();
+        subtitleList.add("http://img.lemmovie.com/sub/Game.of.Thrones.S08E01_cn.srt");
+        subtitleList.add("http://img.lemmovie.com/sub/quanyou8_1_track3_en.srt");
+        SourceConfigure configure = new SourceConfigure(VIDEO_URL,subtitleList);
         iPlayer.play(configure);
     }
 
@@ -214,6 +221,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } else {
                     iPlayer.start();
                 }
+                break;
+            case R.id.btn_subtitle_switch:
+                iPlayer.switchSubtitle(1);
                 break;
         }
     }

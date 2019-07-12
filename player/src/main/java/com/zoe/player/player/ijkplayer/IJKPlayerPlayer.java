@@ -215,10 +215,11 @@ public class IJKPlayerPlayer implements Player, SurfaceHolder.Callback, Subtitle
     }
 
     private void setSubtitle() {
-        if(mSourceConfigure != null && !TextUtils.isEmpty(mSourceConfigure.getSubtitleUrl())) {
+        if(mSourceConfigure != null && mSourceConfigure.getSubtitleList() != null
+                && mSourceConfigure.getSubtitleList().size() > 0 && !TextUtils.isEmpty(mSourceConfigure.getSubtitleList().get(0))) {
             createSubtitle();
             mSubtitleEngine.bindToMediaPlayer(this);
-            mSubtitleEngine.setSubtitlePath(mSourceConfigure.getSubtitleUrl());
+            mSubtitleEngine.setSubtitlePath(mSourceConfigure.getSubtitleList().get(0));
         }
     }
 
@@ -378,6 +379,11 @@ public class IJKPlayerPlayer implements Player, SurfaceHolder.Callback, Subtitle
     @Override
     public SourceConfigure getCurrentPlayInfo() {
         return mSourceConfigure;
+    }
+
+    @Override
+    public void switchSubtitle(int index) {
+
     }
 
     @Override

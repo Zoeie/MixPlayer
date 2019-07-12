@@ -209,6 +209,11 @@ public class MediaPlayerPlayer implements Player, SurfaceHolder.Callback, MediaP
     }
 
     @Override
+    public void switchSubtitle(int index) {
+
+    }
+
+    @Override
     public void surfaceCreated(SurfaceHolder holder) {
 
     }
@@ -237,10 +242,11 @@ public class MediaPlayerPlayer implements Player, SurfaceHolder.Callback, MediaP
     }
 
     private void setSubtitle() {
-        if(mSourceConfigure != null && !TextUtils.isEmpty(mSourceConfigure.getSubtitleUrl())) {
+        if(mSourceConfigure != null && mSourceConfigure.getSubtitleList() != null
+                && mSourceConfigure.getSubtitleList().size() > 0 && !TextUtils.isEmpty(mSourceConfigure.getSubtitleList().get(0))) {
             createSubtitle();
             mSubtitleEngine.bindToMediaPlayer(this);
-            mSubtitleEngine.setSubtitlePath(mSourceConfigure.getSubtitleUrl());
+            mSubtitleEngine.setSubtitlePath(mSourceConfigure.getSubtitleList().get(0));
         }
     }
 

@@ -7,6 +7,9 @@ import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.Format;
@@ -45,9 +48,6 @@ import com.zoe.player.player.module.VideoFormat;
 
 import java.io.File;
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 /**
  * author zoe
@@ -119,7 +119,7 @@ public class ExoPlayer implements Player {
 
     private MediaSource getMediaSource(SourceConfigure configure) {
         String playUrl=configure.getPlayUrl();
-        String subtitleUrl=configure.getSubtitleUrl();
+        List<String> subtitleList = configure.getSubtitleList();
         MediaSource mediaSource;
         int contentType = inferContentType(playUrl);
         DataSource.Factory factory;
@@ -158,9 +158,13 @@ public class ExoPlayer implements Player {
                         .createMediaSource(Uri.parse(playUrl));
                 break;
         }
-        if(!TextUtils.isEmpty(subtitleUrl)) {
-            MediaSource subtitleSource = getMediaSource(subtitleUrl);
-            return new MergingMediaSource(mediaSource, subtitleSource);
+        if(subtitleList != null && subtitleList.size() > 0) {
+            MediaSource[] subSources = new MediaSource[subtitleList.size() + 1];
+            subSources[0] = mediaSource;
+            for (int i = 0; i < subtitleList.size(); i++) {
+                subSources[1 + i] = getMediaSource(subtitleList.get(i));
+            }
+            return new MergingMediaSource(subSources);
         }
         return mediaSource;
     }
@@ -194,10 +198,18 @@ public class ExoPlayer implements Player {
                 null, // An identifier for the track. May be null.
                 mimeType, // The mime type. Must be set correctly.
                 C.SELECTION_FLAG_DEFAULT, // Selection flags for the track.
-                null); // The subtitle language. May be null.
+                getSubtitleLanguage(subtitleUrl)); // The subtitle language. May be null.
         DataSource.Factory factory = new DefaultDataSourceFactory(mContext, Util.getUserAgent(mContext, "subtitlePlayer"));
         return new SingleSampleMediaSource.Factory(factory)
                 .createMediaSource(Uri.parse(subtitleUrl), subtitleFormat, C.TIME_UNSET);
+    }
+
+    //通过链接判断是什么语言的字幕
+    private String getSubtitleLanguage(String subtitleUrl) {
+        if(TextUtils.isEmpty(subtitleUrl)) return null;
+        int dot = subtitleUrl.lastIndexOf('.');
+        String temp = subtitleUrl.substring(0, dot);
+        return temp.substring(temp.length() - 2);//截取拓展名前面最后的两个字符，作为字幕的语言
     }
 
     private TextOutput mOutput = new TextOutput() {
@@ -434,6 +446,13 @@ public class ExoPlayer implements Player {
     @Override
     public SourceConfigure getCurrentPlayInfo(){
         return mCurrentPlayInfo;
+    }
+
+    @Override
+    public void switchSubtitle(int index) {
+        if(exoPlayerHelper != null) {
+            exoPlayerHelper.textTrackSelect(index);
+        }
     }
 
     /**
