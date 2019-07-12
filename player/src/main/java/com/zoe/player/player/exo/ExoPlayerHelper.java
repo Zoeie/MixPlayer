@@ -20,6 +20,7 @@ import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.util.EventLogger;
+import com.google.android.exoplayer2.util.MimeTypes;
 import com.google.android.exoplayer2.video.DummySurface;
 
 import java.security.SecureRandom;
@@ -89,6 +90,17 @@ public class ExoPlayerHelper {
             } else if (exoPlayer.getRendererType(i) == C.TRACK_TYPE_VIDEO) {
                 //TODO 视频
             } else if (exoPlayer.getRendererType(i) == C.TRACK_TYPE_TEXT) {
+                for (int j = 0; j < trackGroups.length; j++) {
+                    TrackGroup trackGroup = trackGroups.get(j);
+                    if(trackGroup.length > 0) {
+                        Format format = trackGroup.getFormat(0);
+                        //把内置字幕过滤掉,查询外挂字幕索引+1
+                        if(!MimeTypes.APPLICATION_SUBRIP.equals(format.sampleMimeType) && !MimeTypes.TEXT_SSA.equals(format.sampleMimeType)) {
+                            index++;
+                        }
+                    }
+                }
+                Log.e(TAG, "switch subtitle index:" + index);
                 //字幕
                 for (int j = 0; j < trackGroups.length; j++) {
                     //选中字幕的索引
@@ -99,6 +111,35 @@ public class ExoPlayerHelper {
                             Log.e(TAG, format.toString());
                             DefaultTrackSelector.Parameters newParameters = trackSelector.buildUponParameters()
                                     .setPreferredTextLanguage(format.language).build();
+                            trackSelector.setParameters(newParameters);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * TODO 后续需区分手机和TV 手机是支持AC3的音频编码格式
+     * 禁止ac3的格式视频，显示视频
+     * @param enable 音频是否可用
+     */
+    void audioTrackEnable(boolean enable) {
+        if(trackSelector ==  null || exoPlayer == null) return;
+        MappingTrackSelector.MappedTrackInfo mappedTrackInfo = trackSelector.getCurrentMappedTrackInfo();
+        if (mappedTrackInfo == null) return;
+        for (int i = 0; i < mappedTrackInfo.getRendererCount(); i++) {
+            TrackGroupArray trackGroups = mappedTrackInfo.getTrackGroups(i);
+            if (trackGroups.length == 0) continue;
+            if (exoPlayer.getRendererType(i) == C.TRACK_TYPE_AUDIO) {
+                for (int m = 0; m < trackGroups.length; m++) {
+                    TrackGroup trackGroup = trackGroups.get(m);
+                    for (int n = 0; n < trackGroup.length; n++) {
+                        Format format = trackGroup.getFormat(n);
+                        if (MimeTypes.AUDIO_AC3.equals(format.sampleMimeType)) {
+                            DefaultTrackSelector.Parameters newParameters = trackSelector.buildUponParameters()
+                                    .clearSelectionOverrides(i)
+                                    .setRendererDisabled(i, enable).build();
                             trackSelector.setParameters(newParameters);
                         }
                     }
