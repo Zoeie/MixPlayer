@@ -4,5 +4,6 @@
 /.idea
 .DS_Store
 /build
+/ffmpeg/build
 /captures
 .externalNativeBuild

@@ -48,6 +48,7 @@ android {
 dependencies {
     //拓展类，依赖exoplayer-core   https://github.com/PaulWoitaschek/ExoPlayer-Extensions
     //此为热心网友打包的依赖，且被维护，可以使用
-    implementation 'com.google.android.exoplayer:exoplayer-core:2.9.2'
+    //implementation 'com.google.android.exoplayer:exoplayer-core:2.9.2'
+    implementation project(path: ':core')
     implementation 'androidx.annotation:annotation:1.0.2'
 }
