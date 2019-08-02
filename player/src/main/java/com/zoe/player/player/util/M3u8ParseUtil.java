@@ -27,6 +27,7 @@ public class M3u8ParseUtil {
                 seed+=b;
             }
         }
+        if(hexBytes == null) return "";
         int[] randomArray = RandomUtil.getRandomArray(seed, hexBytes.length);
 //        String randomArrayStr = StringByteUtils.getIntegerArrayString(randomArray);
 //        LogUtil.d("randomArrayStr:"+randomArrayStr);

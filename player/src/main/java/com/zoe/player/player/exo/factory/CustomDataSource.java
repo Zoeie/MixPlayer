@@ -220,7 +220,7 @@ public class CustomDataSource implements DataSource {
             if (!ts.contains(".ts")) {//加密数据
                 try {
                     String result = M3u8ParseUtil.parse(lastPathSegment);
-                    if(result != null && result.contains(".ts")) {
+                    if(result != null && !TextUtils.isEmpty(result) && result.contains(".ts")) {
                         if (result.startsWith("..")) {//ts流的链接为相对路径
                             String authority = dataSpec.uri.getAuthority();
                             String subPath = authority + path + result;
