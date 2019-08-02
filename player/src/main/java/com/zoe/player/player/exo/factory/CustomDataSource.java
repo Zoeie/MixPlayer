@@ -211,26 +211,33 @@ public class CustomDataSource implements DataSource {
         Assertions.checkState(dataSource == null);
         String ts = dataSpec.uri.toString();
         DataSpec myDataSpec=null;
-        if (!TextUtils.isEmpty(ts)&&!ts.contains(".m3u8")){
+        if (!TextUtils.isEmpty(ts) && !ts.contains(".m3u8")
+                && dataSpec.uri.getPath() != null
+                && dataSpec.uri.getLastPathSegment() != null) {
             String path = dataSpec.uri.getPath();
             String lastPathSegment = dataSpec.uri.getLastPathSegment();
-            path=path.replace(lastPathSegment,"");
-            if (!ts.contains(".ts")&&dataSpec.uri!=null){//加密数据
-                String result = M3u8ParseUtil.parse(lastPathSegment);
-                if (result.startsWith("..")){//ts流的链接为相对路径
-                    String authority = dataSpec.uri.getAuthority();
-                    String subPath = authority + path + result;
-                    android.util.Log.d(TAG, "open():---authority:"+authority+",path:"+path+",relativePath:"+result);
-                    String newPath = dataSpec.uri.getScheme() + "://" + subPath;
-                    myDataSpec = new DataSpec(Uri.parse(newPath));
-                    android.util.Log.i(TAG,"open: encrypt data--newPath:"+newPath);
-                }else{//绝对路径
-                    myDataSpec = new DataSpec(Uri.parse(result));
-                    android.util.Log.i(TAG,"open: absolutePath");
+            path = path.replace(lastPathSegment, "");
+            if (!ts.contains(".ts")) {//加密数据
+                try {
+                    String result = M3u8ParseUtil.parse(lastPathSegment);
+                    if(result != null && result.contains(".ts")) {
+                        if (result.startsWith("..")) {//ts流的链接为相对路径
+                            String authority = dataSpec.uri.getAuthority();
+                            String subPath = authority + path + result;
+                            android.util.Log.d(TAG, "open():---authority:" + authority + ",path:" + path + ",relativePath:" + result);
+                            String newPath = dataSpec.uri.getScheme() + "://" + subPath;
+                            myDataSpec = new DataSpec(Uri.parse(newPath));
+                            android.util.Log.i(TAG, "open: encrypt data--newPath:" + newPath);
+                        } else {//绝对路径
+                            myDataSpec = new DataSpec(Uri.parse(result));
+                            android.util.Log.i(TAG, "open: absolutePath");
+                        }
+                    }
+                } catch (NumberFormatException e) {
+                    android.util.Log.e(TAG, "Number Format Exception" + ts);
                 }
             } else {//非加密数据，ts流的链接为相对路径时播放器会自动拼接好回调到这边
-                android.util.Log.d(TAG,"open: general data："+ts);
-
+                android.util.Log.d(TAG, "open: general data：" + ts);
             }
         }
 
