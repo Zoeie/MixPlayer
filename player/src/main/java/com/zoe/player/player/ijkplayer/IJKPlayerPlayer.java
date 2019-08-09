@@ -150,7 +150,7 @@ public class IJKPlayerPlayer implements Player, SurfaceHolder.Callback, Subtitle
             public boolean onError(IMediaPlayer iMediaPlayer, int what, int extra) {
                 Log.e("IJKPLayer", "what:" + what + ",extra:" + extra);
                 if (mPlayListener != null) {
-                    mPlayListener.onPlayError(what);
+                    mPlayListener.onPlayError(new Exception("IJKPlayer exception"), what);
                 }
                 return true;
             }

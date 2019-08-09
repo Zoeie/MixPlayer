@@ -29,7 +29,7 @@ public interface PlayListener {
     void onPlayEnd();
 
     //播放错误码
-    void onPlayError(int errorCode);
+    void onPlayError(Exception e, int errorCode);
 
     //字幕变更
     void onSubtitleChanged(SubtitleData subtitle);

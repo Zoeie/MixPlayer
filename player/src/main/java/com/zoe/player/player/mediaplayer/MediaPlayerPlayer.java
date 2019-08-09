@@ -259,7 +259,7 @@ public class MediaPlayerPlayer implements Player, SurfaceHolder.Callback, MediaP
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
         if (mPlayListener != null) {
-            mPlayListener.onPlayError(what);
+            mPlayListener.onPlayError(new Exception("MediaPlayer exception"), what);
         }
         return false;
     }

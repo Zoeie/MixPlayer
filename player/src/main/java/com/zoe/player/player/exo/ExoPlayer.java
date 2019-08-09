@@ -310,11 +310,9 @@ public class ExoPlayer implements Player {
         @Override
         public void onPlayerError(ExoPlaybackException error) {
             if(error != null) {
-                error.printStackTrace();
-                Log.e(TAG, "ExoPlaybackException:" + error.type);
-            }
-            if (mPlayListener != null) {
-                mPlayListener.onPlayError(error == null ? ExoPlaybackException.TYPE_UNEXPECTED : error.type);
+                if (mPlayListener != null) {
+                    mPlayListener.onPlayError(error, error.type);
+                }
             }
         }
 
