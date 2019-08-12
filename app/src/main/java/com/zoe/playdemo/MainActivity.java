@@ -171,13 +171,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             @Override
-            public void onPlayError(int errorCode) {
+            public void onPlayError(Exception e,int errorCode) {
                 LogUtil.d("onPlayError");
             }
 
             @Override
             public void onSubtitleChanged(SubtitleData subtitle) {
-                LogUtil.d("onSubtitleChanged");
+                if(subtitle == null) {
+                    LogUtil.d("onSubtitleChanged:"  + null);
+                } else {
+                    LogUtil.d("onSubtitleChanged："+subtitle.getContent());
+                }
             }
 
             @Override
