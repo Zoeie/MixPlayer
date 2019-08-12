@@ -221,7 +221,20 @@ public class CustomDataSource implements DataSource {
                 try {
                     String result = M3u8ParseUtil.parse(lastPathSegment);
                     if(result != null && !TextUtils.isEmpty(result) && result.contains(".ts")) {
-                        if (result.startsWith("..")) {//ts流的链接为相对路径
+                        if (result.startsWith("http")){//绝对路径
+                            myDataSpec = new DataSpec(Uri.parse(result));
+                            android.util.Log.i(TAG, "open: absolutePath");
+                        }else {
+                            String authority = dataSpec.uri.getAuthority();
+                            String subPath = authority + path + result;
+                            android.util.Log.d(TAG, "open():---authority:" + authority + ",path:" + path + ",relativePath:" + result);
+                            String newPath = dataSpec.uri.getScheme() + "://" + subPath;
+                            myDataSpec = new DataSpec(Uri.parse(newPath));
+                            android.util.Log.i(TAG, "open: encrypt data--newPath:" + newPath);
+                        }
+
+
+                        /*if (result.startsWith("..")) {//ts流的链接为相对路径
                             String authority = dataSpec.uri.getAuthority();
                             String subPath = authority + path + result;
                             android.util.Log.d(TAG, "open():---authority:" + authority + ",path:" + path + ",relativePath:" + result);
@@ -231,7 +244,7 @@ public class CustomDataSource implements DataSource {
                         } else {//绝对路径
                             myDataSpec = new DataSpec(Uri.parse(result));
                             android.util.Log.i(TAG, "open: absolutePath");
-                        }
+                        }*/
                     }
                 } catch (NumberFormatException e) {
                     android.util.Log.e(TAG, "Number Format Exception" + ts);
