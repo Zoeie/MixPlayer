@@ -42,8 +42,10 @@ public class ExoPlayerHelper {
     private static final String TAG = "ExoPlayerHelper";
     private SimpleExoPlayer exoPlayer;
     private DefaultTrackSelector trackSelector;
+    private boolean released = false;
 
     SimpleExoPlayer buildExoPlayer(Context context, ExoConfigure configure) {
+        released = false;
         handleSSLHandshake();
         //1. 创建一个默认的 TrackSelector
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
@@ -148,7 +150,7 @@ public class ExoPlayerHelper {
         }
     }
 
-    private static final class SurfaceManager1 implements SurfaceHolder.Callback {
+    private final class SurfaceManager1 implements SurfaceHolder.Callback {
 
         private final SimpleExoPlayer player;
         private final DefaultTrackSelector trackSelector;
@@ -171,9 +173,15 @@ public class ExoPlayerHelper {
 
         @Override
         public void surfaceDestroyed(SurfaceHolder holder) {
-            player.setVideoSurface(null);
-            trackSelector.setRendererDisabled(0, true);
+            if(!released) {
+                player.setVideoSurface(null);
+                trackSelector.setRendererDisabled(0, true);
+            }
         }
+    }
+
+    void release() {
+        released = true;
     }
 
     private static final class SurfaceManager2 implements SurfaceHolder.Callback {

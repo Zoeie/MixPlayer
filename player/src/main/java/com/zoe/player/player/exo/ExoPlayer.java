@@ -372,6 +372,10 @@ public class ExoPlayer implements Player {
             exoPlayer.release();
             exoPlayer = null;
         }
+        if(exoPlayerHelper != null) {
+            exoPlayerHelper.release();
+            exoPlayerHelper = null;
+        }
         handler.removeCallbacks(progressAction);
         handler.removeCallbacks(checkAc3Runnable);
     }
