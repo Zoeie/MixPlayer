@@ -53,4 +53,6 @@ public interface Player {
      * @param index 需要切换字幕的索引
      */
     void switchSubtitle(int index);
+
+    void switchSpeed(float speed);
 }

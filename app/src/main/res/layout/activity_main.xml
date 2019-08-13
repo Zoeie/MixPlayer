@@ -19,10 +19,18 @@
         android:layout_height="wrap_content"
         android:text="测试字幕切换"/>
 
+    <Button
+        android:layout_below="@id/btn_subtitle_switch"
+        android:id="@+id/btn_speed_switch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="测试切换倍速"/>
+
     <SurfaceView
+        android:layout_centerInParent="true"
         android:id="@+id/surface_view"
-        android:layout_width="200dp"
-        android:layout_height="200dp" />
+        android:layout_width="480dp"
+        android:layout_height="270dp" />
 
     <TextView
         android:layout_marginStart="@dimen/dpi_20"

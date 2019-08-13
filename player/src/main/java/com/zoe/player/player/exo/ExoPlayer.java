@@ -459,6 +459,13 @@ public class ExoPlayer implements Player {
         }
     }
 
+    @Override
+    public void switchSpeed(float speed) {
+        if(exoPlayer != null) {
+            exoPlayer.setPlaybackParameters(new PlaybackParameters(speed));
+        }
+    }
+
     /**
      * Starts or stops playback. Also takes care of the Play/Pause button toggling
      *

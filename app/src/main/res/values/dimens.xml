@@ -73,8 +73,11 @@
     <dimen name="dpi_182">182dp</dimen>
     <dimen name="dpi_184">184dp</dimen>
     <dimen name="dpi_193">193dp</dimen>
+    <dimen name="dpi_270">270dp</dimen>
     <dimen name="dpi_319">319dp</dimen>
+    <dimen name="dpi_400">400dp</dimen>
     <dimen name="dpi_416">416dp</dimen>
+    <dimen name="dpi_480">480dp</dimen>
     <dimen name="dpi_497">497dp</dimen>
     <dimen name="dpi_561">561dp</dimen>
 

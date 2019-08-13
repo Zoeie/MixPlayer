@@ -4,6 +4,8 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaFormat;
 import android.media.MediaPlayer;
+import android.media.PlaybackParams;
+import android.os.Build;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
@@ -211,6 +213,17 @@ public class MediaPlayerPlayer implements Player, SurfaceHolder.Callback, MediaP
     @Override
     public void switchSubtitle(int index) {
 
+    }
+
+    @Override
+    public void switchSpeed(float speed) {
+        if(mMediaPlayer != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                PlaybackParams playbackParams = mMediaPlayer.getPlaybackParams();
+                playbackParams.setSpeed(speed);
+                mMediaPlayer.setPlaybackParams(playbackParams);
+            }
+        }
     }
 
     @Override

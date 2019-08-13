@@ -387,6 +387,13 @@ public class IJKPlayerPlayer implements Player, SurfaceHolder.Callback, Subtitle
     }
 
     @Override
+    public void switchSpeed(float speed) {
+        if(ijkMediaPlayer != null) {
+            ijkMediaPlayer.setSpeed(speed);
+        }
+    }
+
+    @Override
     public void surfaceCreated(SurfaceHolder holder) {
 
     }

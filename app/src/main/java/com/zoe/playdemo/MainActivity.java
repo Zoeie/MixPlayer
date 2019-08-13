@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Player iPlayer;
     private boolean flag;
     private RelativeLayout rlMain;
+    private float speed = 1;
 
 //        private static final String VIDEO_URL = "http://yfvod.lemmovie.com/vod/48F0ADF7096844F697FB0B5877029AA3/master.m3u8?pt=0";
 //        private static final String VIDEO_URL = "http://yflive2.lemmovie.com/cdn/iptv-line.com:6969/live/my.longtv1-restream/izEUgF7l/2457.m3u8";
@@ -47,8 +48,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //    private static final String VIDEO_URL = "https://zy.512wx.com/20171130/EI2p4dYT/index.m3u8";
 //    private static final String VIDEO_URL = "http://yfvod.lemmovie.com/vod/437332CF8EA1444B8A06FB923CEC9FDC/master.m3u8?pt=0";
 //    private static final String VIDEO_URL = "https://www2.yuboyun.com/hls/2018/07/29/SqB3V9P4/playlist.m3u8";
-//    private static final String VIDEO_URL = "http://10.20.63.116:81/lvod/2019/07/94253fa8-c9cc-41fe-3585-c2688dcbaed4/master.m3u8";
-    private static final String VIDEO_URL = "http://10.11.89.80:8080/timeshift/a678c957-ef44-4c5d-a2d9-99003bab05d5/master.m3u8";//时移;
+    private static final String VIDEO_URL = "http://10.20.63.116:81/lvod/2019/07/94253fa8-c9cc-41fe-3585-c2688dcbaed4/master.m3u8";
+//    private static final String VIDEO_URL = "http://10.11.89.80:8080/timeshift/a678c957-ef44-4c5d-a2d9-99003bab05d5/master.m3u8";//时移;
     private MySeekBar seekBar;
     private TextView            tvPassTime;
     private TextView            tvBufferTime;
@@ -70,6 +71,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Button btnSubtitle = findViewById(R.id.btn_subtitle_switch);
         btnSubtitle.setOnClickListener(this);
+
+        Button btnSpeed = findViewById(R.id.btn_speed_switch);
+        btnSpeed.setOnClickListener(this);
 
         Button btnPlay = findViewById(R.id.btn_pause);
         btnPlay.setOnClickListener(this);
@@ -232,6 +236,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btn_subtitle_switch:
 //                iPlayer.switchSubtitle(1);
                 break;
+            case R.id.btn_speed_switch:
+                speed += 0.5f;
+                if(speed > 6) {
+                    speed = 1;
+                }
+                LogUtil.d("speed is :" + speed);
+                iPlayer.switchSpeed(speed);
+                break;
         }
     }
 
@@ -272,8 +284,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void exitFullScreen1() {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                (int) getResources().getDimension(R.dimen.dp_200),
-                (int) getResources().getDimension(R.dimen.dp_200)
+                (int) getResources().getDimension(R.dimen.dpi_480),
+                (int) getResources().getDimension(R.dimen.dpi_270)
         );
         surfaceView.setLayoutParams(params);
     }
@@ -281,8 +293,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void exitFullScreen() {
         removeViewFormParent(surfaceView);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                (int) getResources().getDimension(R.dimen.dp_200),
-                (int) getResources().getDimension(R.dimen.dp_200)
+                (int) getResources().getDimension(R.dimen.dpi_480),
+                (int) getResources().getDimension(R.dimen.dpi_270)
         );
         rlMain.addView(surfaceView, params);
     }
