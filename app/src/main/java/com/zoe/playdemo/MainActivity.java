@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView            tvPassTime;
     private TextView            tvBufferTime;
     private boolean             isDragging;
+    private TextView tvDuration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         tvPassTime = findViewById(R.id.tv_pass_time);
         tvBufferTime = findViewById(R.id.tv_buffer_time);
+        tvDuration = findViewById(R.id.tv_duration);
 
         Button btnSwitch = findViewById(R.id.btn_screen_switch);
         btnSwitch.setOnClickListener(this);
@@ -137,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onPlayPrepared() {
+                tvDuration.setText(String.format("总时长：%s", formatPlayTime(iPlayer.getDuration())));
                 LogUtil.d("onPlayPrepared");
             }
 
@@ -166,8 +169,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 int secondaryProgress = (int) (bufferedPos * 100 * (1.0f) / duration + 0.5f);
                 seekBar.setProgress(progress);
                 seekBar.setSecondaryProgress(secondaryProgress);
-                tvPassTime.setText(formatPlayTime(currentPos));
-                tvBufferTime.setText(formatPlayTime(bufferedPos));
+                tvPassTime.setText(String.format("当前进度：%s", formatPlayTime(currentPos)));
+                tvBufferTime.setText(String.format("缓冲进度：%s", formatPlayTime(bufferedPos)));
             }
 
             @Override
@@ -283,10 +286,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void exitFullScreen1() {
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                (int) getResources().getDimension(R.dimen.dpi_480),
-                (int) getResources().getDimension(R.dimen.dpi_270)
-        );
+        RelativeLayout.LayoutParams params  = (RelativeLayout.LayoutParams) surfaceView.getLayoutParams();
+        params.width = (int) getResources().getDimension(R.dimen.dpi_480);
+        params.height = (int) getResources().getDimension(R.dimen.dpi_270);
         surfaceView.setLayoutParams(params);
     }
 
