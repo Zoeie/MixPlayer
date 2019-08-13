@@ -218,11 +218,7 @@ public class MediaPlayerPlayer implements Player, SurfaceHolder.Callback, MediaP
     @Override
     public void switchSpeed(float speed) {
         if(mMediaPlayer != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                PlaybackParams playbackParams = mMediaPlayer.getPlaybackParams();
-                playbackParams.setSpeed(speed);
-                mMediaPlayer.setPlaybackParams(playbackParams);
-            }
+            //不支持切换倍速
         }
     }
 
