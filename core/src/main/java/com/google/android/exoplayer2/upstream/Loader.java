@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.net.ProtocolException;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -330,6 +331,12 @@ public final class Loader implements LoaderErrorThrower {
 
     public void maybeThrowError(int minRetryCount) throws IOException {
       if (currentError != null && errorCount > minRetryCount) {
+        if(currentError instanceof ProtocolException) {
+          /***********当遇到协议异常时，修改为取消当前ts片的下载(即跳过该片)***********/
+          cancel(false);
+          return;
+          /***********当遇到协议异常时，修改为取消当前ts片的下载(即跳过该片)***********/
+        }
         throw currentError;
       }
     }
