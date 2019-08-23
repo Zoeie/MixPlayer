@@ -232,19 +232,6 @@ public class CustomDataSource implements DataSource {
                             myDataSpec = new DataSpec(Uri.parse(newPath));
                             android.util.Log.i(TAG, "open: encrypt data--newPath:" + newPath);
                         }
-
-
-                        /*if (result.startsWith("..")) {//ts流的链接为相对路径
-                            String authority = dataSpec.uri.getAuthority();
-                            String subPath = authority + path + result;
-                            android.util.Log.d(TAG, "open():---authority:" + authority + ",path:" + path + ",relativePath:" + result);
-                            String newPath = dataSpec.uri.getScheme() + "://" + subPath;
-                            myDataSpec = new DataSpec(Uri.parse(newPath));
-                            android.util.Log.i(TAG, "open: encrypt data--newPath:" + newPath);
-                        } else {//绝对路径
-                            myDataSpec = new DataSpec(Uri.parse(result));
-                            android.util.Log.i(TAG, "open: absolutePath");
-                        }*/
                     }
                 } catch (NumberFormatException e) {
                     android.util.Log.e(TAG, "Number Format Exception" + ts);

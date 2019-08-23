@@ -242,16 +242,18 @@ public class ExoPlayerHelper {
             SSLContext sc = SSLContext.getInstance("TLS");
             // trustAllCerts信任所有的证书
             sc.init(null, trustAllCerts, new SecureRandom());
+            CustomHostnameVerifier verifier = new CustomHostnameVerifier();
             HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-            HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
-                @Override
-                public boolean verify(String hostname, SSLSession session) {
-                    return true;
-                }
-            });
+            HttpsURLConnection.setDefaultHostnameVerifier(verifier);
         } catch (Exception ignored) {
         }
     }
 
 
+    private static class CustomHostnameVerifier implements HostnameVerifier{
+        @Override
+        public boolean verify(String hostname, SSLSession session) {
+            return true;
+        }
+    }
 }
