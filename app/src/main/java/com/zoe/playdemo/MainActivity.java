@@ -48,8 +48,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //    private static final String VIDEO_URL = "https://zy.512wx.com/20171130/EI2p4dYT/index.m3u8";
 //    private static final String VIDEO_URL = "http://yfvod.lemmovie.com/vod/437332CF8EA1444B8A06FB923CEC9FDC/master.m3u8?pt=0";
 //    private static final String VIDEO_URL = "https://www2.yuboyun.com/hls/2018/07/29/SqB3V9P4/playlist.m3u8";
-    private static final String VIDEO_URL = "http://10.20.63.116:81/lvod/2019/07/94253fa8-c9cc-41fe-3585-c2688dcbaed4/master.m3u8";
-//    private static final String VIDEO_URL = "http://10.11.89.80:8080/timeshift/a678c957-ef44-4c5d-a2d9-99003bab05d5/master.m3u8";//时移;
+//    private static final String VIDEO_URL = "http://10.20.63.116:81/lvod/2019/07/94253fa8-c9cc-41fe-3585-c2688dcbaed4/master.m3u8";
+    private static final String VIDEO_URL = "http://cdn.lemmovie.com/live/e23f6359-99ea-43ad-8bd3-41dbf3ed4b20.m3u8";
     private MySeekBar seekBar;
     private TextView            tvPassTime;
     private TextView            tvBufferTime;
