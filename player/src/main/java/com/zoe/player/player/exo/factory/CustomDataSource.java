@@ -54,6 +54,7 @@ public class CustomDataSource implements DataSource {
     private @Nullable DataSource rawResourceDataSource;
 
     private @Nullable DataSource dataSource;
+    private DataSpec myDataSpec=null;
 
     /**
      * Constructs a new instance, optionally configured to follow cross-protocol redirects.
@@ -210,7 +211,6 @@ public class CustomDataSource implements DataSource {
     public long open(DataSpec dataSpec) throws IOException {
         Assertions.checkState(dataSource == null);
         String ts = dataSpec.uri.toString();
-        DataSpec myDataSpec=null;
         if (!TextUtils.isEmpty(ts) && !ts.contains(".m3u8")
                 && dataSpec.uri.getPath() != null
                 && dataSpec.uri.getLastPathSegment() != null) {
