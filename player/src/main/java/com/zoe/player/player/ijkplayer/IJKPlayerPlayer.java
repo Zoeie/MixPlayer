@@ -68,6 +68,20 @@ public class IJKPlayerPlayer implements Player, SurfaceHolder.Callback, Subtitle
     //创建一个新的player
     private IjkMediaPlayer createPlayer() {
         IjkMediaPlayer player = new IjkMediaPlayer();
+        setOption(player);
+        player.setVolume(1.0f, 1.0f);
+        player.setScreenOnWhilePlaying(true);
+
+        setEnableMediaCodec(player, mEnableMediaCodec);
+        return player;
+    }
+
+    /**
+     * 设置播放器配置参数
+     * @param player
+     */
+    private void  setOption(IjkMediaPlayer player){
+        if (player==null) return;
         player.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "opensles", 1);
 
         player.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "overlay-format", IjkMediaPlayer.SDL_FCC_RV32);
@@ -78,26 +92,25 @@ public class IJKPlayerPlayer implements Player, SurfaceHolder.Callback, Subtitle
 
         player.setOption(IjkMediaPlayer.OPT_CATEGORY_CODEC, "skip_loop_filter", 48);
         player.setOption(IjkMediaPlayer.OPT_CATEGORY_CODEC, "min-frames", 100); //最小加载100帧才显示
-        player.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "enable-accurate-seek", 1);
+        player.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "enable-accurate-seek", 0);//设置为不精准seek，1为精准seek
 
         //设置缓存
-        player.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "cache_file_path","sdcard/a.temp");
-        player.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "cache_map_path","sdcard/b.temp");
-        player.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "parse_cache_map", 1);
-        player.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "auto_save_map", 1);
+        //        player.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "cache_file_path","sdcard/a.temp");
+        //        player.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "cache_map_path","sdcard/b.temp");
+        //        player.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "parse_cache_map", 1);
+        //        player.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "auto_save_map", 1);
 
-        //ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "max-buffer-size", 100 * 1024 * 1024); //缓冲10MB
+        //m3u8本地播放问题
+        player.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "protocol_whitelist", "crypto,file,http,https,tcp,tls,udp,hls");
+
         //ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER,"reconnect",3); //播放重连次数
         //ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER,"packet-buffering",0); //开启/关闭 缓冲
         //ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER,"infbuf",1); //是否无限读
-//        player.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "dns_cache_clear", 1);//清空dns
-
-        player.setVolume(1.0f, 1.0f);
-        player.setScreenOnWhilePlaying(true);
-
-        setEnableMediaCodec(player, mEnableMediaCodec);
-        return player;
+        //ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "dns_cache_clear", 1);//清空dns
     }
+
+
+
 
     //设置ijkplayer的监听
     private void setListener(final IMediaPlayer player){
@@ -259,7 +272,7 @@ public class IJKPlayerPlayer implements Player, SurfaceHolder.Callback, Subtitle
             mPlayListener.onPlayPreparing();
         }
         mSourceConfigure = configure;
-        ijkMediaPlayer.reset();
+//        ijkMediaPlayer.reset();
         setListener(ijkMediaPlayer);
         try {
             if(mHolder != null) {

@@ -1,6 +1,7 @@
 package com.zoe.playdemo;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.KeyEvent;
 import android.view.SurfaceView;
 import android.view.View;
@@ -22,9 +23,8 @@ import com.zoe.player.player.base.Player;
 import com.zoe.player.player.base.SourceConfigure;
 import com.zoe.player.player.base.SubtitleData;
 
-import java.util.ArrayList;
+import java.io.File;
 import java.util.Formatter;
-import java.util.List;
 import java.util.Locale;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -197,11 +197,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         }, PlayConstant.EXO_PLAYER, new PlayConfigure(surfaceView));
-        List<String> subtitleList = new ArrayList<>();
+       /* List<String> subtitleList = new ArrayList<>();
         subtitleList.add("http://img.lemmovie.com/sub/Game.of.Thrones.S08E01_cn.srt");
         subtitleList.add("http://img.lemmovie.com/sub/quanyou8_1_track3_en.srt");
-//        SourceConfigure configure = new SourceConfigure(VIDEO_URL,subtitleList);
-        SourceConfigure configure = new SourceConfigure(VIDEO_URL);
+        SourceConfigure configure = new SourceConfigure(VIDEO_URL,subtitleList);*/
+
+        String path = Environment.getExternalStorageDirectory() + File.separator + "J2.m3u8";
+        SourceConfigure configure = new SourceConfigure(path);
+
         iPlayer.play(configure);
     }
 
