@@ -281,12 +281,7 @@ public class IJKPlayerPlayer implements Player, SurfaceHolder.Callback, Subtitle
             mPlayListener.onPlayPreparing();
         }
         mSourceConfigure = configure;
-<<<<<<< HEAD
         resetplayer();
-=======
-        ijkMediaPlayer.reset();
-        setOption(ijkMediaPlayer)
->>>>>>> 6c2d4ff7ca42e4fdd3bfb488113f5adbc22c5e0a
         setListener(ijkMediaPlayer);
         try {
             if(mHolder != null) {
