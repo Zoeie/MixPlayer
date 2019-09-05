@@ -48,13 +48,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //    private static final String VIDEO_URL = "https://zy.512wx.com/20171130/EI2p4dYT/index.m3u8";
 //    private static final String VIDEO_URL = "http://yfvod.lemmovie.com/vod/437332CF8EA1444B8A06FB923CEC9FDC/master.m3u8?pt=0";
 //    private static final String VIDEO_URL = "https://www2.yuboyun.com/hls/2018/07/29/SqB3V9P4/playlist.m3u8";
-//    private static final String VIDEO_URL = "http://10.20.63.116:81/lvod/2019/07/94253fa8-c9cc-41fe-3585-c2688dcbaed4/master.m3u8";
+//    private static final String VIDEO_URL = "http://ts.lemmovie.com/a678c957-ef44-4c5d-a2d9-99003bab05d5/master.m3u8";//J2时移
     private static final String VIDEO_URL = "http://cdn.lemmovie.com/live/e23f6359-99ea-43ad-8bd3-41dbf3ed4b20.m3u8";
     private MySeekBar seekBar;
     private TextView            tvPassTime;
     private TextView            tvBufferTime;
     private boolean             isDragging;
     private TextView tvDuration;
+    private String[] mPaths;
+    private int pathIndex=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +82,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button btnPlay = findViewById(R.id.btn_pause);
         btnPlay.setOnClickListener(this);
 
+        Button btnChange = findViewById(R.id.change_source);
+        btnChange.setOnClickListener(this);
+
         seekBar = findViewById(R.id.sb_progress);
         seekBar.setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -98,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             int duration = (int) iPlayer.getDuration();
                             long seekPos = (long) (progress * (1.0f) / 100 * iPlayer.getDuration());
                             iPlayer.seekTo(seekPos);
+                            LogUtil.i("duration:"+duration+",seekPos:"+seekPos);
                         }
                         break;
                 }
@@ -120,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 int progress = seekBar.getProgress();
                 int duration = (int) iPlayer.getDuration();
                 long seekPos = (long) (progress * (1.0f) / 100 * iPlayer.getDuration());
+                LogUtil.i("duration:"+duration+",seekPos:"+seekPos);
                 iPlayer.seekTo(seekPos);
             }
         });
@@ -171,6 +178,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 seekBar.setSecondaryProgress(secondaryProgress);
                 tvPassTime.setText(String.format("当前进度：%s", formatPlayTime(currentPos)));
                 tvBufferTime.setText(String.format("缓冲进度：%s", formatPlayTime(bufferedPos)));
+                LogUtil.i("duration:"+duration+",currentPos:"+currentPos);
             }
 
             @Override
@@ -202,8 +210,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         subtitleList.add("http://img.lemmovie.com/sub/quanyou8_1_track3_en.srt");
         SourceConfigure configure = new SourceConfigure(VIDEO_URL,subtitleList);*/
 
-        String path = Environment.getExternalStorageDirectory() + File.separator + "J2.m3u8";
-        SourceConfigure configure = new SourceConfigure(path);
+        String path1 = Environment.getExternalStorageDirectory() + File.separator + "J5.m3u8";
+        String path2 = Environment.getExternalStorageDirectory() + File.separator + "J2.m3u8";
+        String path3 = Environment.getExternalStorageDirectory() + File.separator + "d1.m3u8";
+        mPaths = new String[]{path1, path2,path3};
+
+        SourceConfigure configure = new SourceConfigure(mPaths[pathIndex]);
 
         iPlayer.play(configure);
     }
@@ -249,6 +261,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 LogUtil.d("speed is :" + speed);
                 iPlayer.switchSpeed(speed);
+                break;
+            case R.id.change_source:
+                pathIndex++;
+                pathIndex%=mPaths.length;
+                iPlayer.play(new SourceConfigure(mPaths[pathIndex]));
                 break;
         }
     }
