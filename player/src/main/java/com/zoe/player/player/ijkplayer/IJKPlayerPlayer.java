@@ -85,11 +85,12 @@ public class IJKPlayerPlayer implements Player, SurfaceHolder.Callback, Subtitle
         player.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "opensles", 1);
 
         player.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "overlay-format", IjkMediaPlayer.SDL_FCC_RV32);
-        player.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "framedrop", 1);
-        player.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "start-on-prepared", 0);
+        player.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "framedrop", 5); //丢帧  是在视频帧处理不过来的时候丢弃一些帧达到同步的效果
+        player.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "start-on-prepared", 1);//准备好之后自动播放
 
         player.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "http-detect-range-support", 1);
 
+        //设置是否开启环路过滤。0：开启，画面质量高，解码开销大。48：关闭，画面质量差点，解码开销小
         player.setOption(IjkMediaPlayer.OPT_CATEGORY_CODEC, "skip_loop_filter", 48);
         player.setOption(IjkMediaPlayer.OPT_CATEGORY_CODEC, "min-frames", 100); //最小加载100帧才显示
         player.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "enable-accurate-seek", 0);//设置为不精准seek，1为精准seek
@@ -102,6 +103,14 @@ public class IJKPlayerPlayer implements Player, SurfaceHolder.Callback, Subtitle
 
         //m3u8本地播放问题
         player.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "protocol_whitelist", "crypto,file,http,https,tcp,tls,udp,hls");
+
+        //解决m3u8文件拖动问题 比如:一个3个多少小时的音频文件，开始播放几秒中，然后拖动到2小时左右的时间，要loading 10分钟
+        player.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "fflags", "fastseek");// 设置seekTo能够快速seek到指定位置并播放
+        //播放前的探测Size，默认是1M, 改小一点会出画面更快
+//        player.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "probesize", 1024 * 1);
+
+        //设置播放前的探测时间 1,达到首屏秒开效果
+//        player.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT,"analyzeduration",1);
 
         //ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER,"reconnect",3); //播放重连次数
         //ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER,"packet-buffering",0); //开启/关闭 缓冲
@@ -272,7 +281,8 @@ public class IJKPlayerPlayer implements Player, SurfaceHolder.Callback, Subtitle
             mPlayListener.onPlayPreparing();
         }
         mSourceConfigure = configure;
-//        ijkMediaPlayer.reset();
+        ijkMediaPlayer.reset();
+        setOption(ijkMediaPlayer)
         setListener(ijkMediaPlayer);
         try {
             if(mHolder != null) {
