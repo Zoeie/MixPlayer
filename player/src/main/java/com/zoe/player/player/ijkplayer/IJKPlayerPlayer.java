@@ -82,7 +82,7 @@ public class IJKPlayerPlayer implements Player, SurfaceHolder.Callback, Subtitle
      */
     private void  setOption(IjkMediaPlayer player){
         if (player==null) return;
-        player.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "opensles", 1);
+        player.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "opensles", 1);//使能opensles功能（音频）,默认值0
 
         player.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "overlay-format", IjkMediaPlayer.SDL_FCC_RV32);
         player.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "framedrop", 5); //丢帧  是在视频帧处理不过来的时候丢弃一些帧达到同步的效果

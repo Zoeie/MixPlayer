@@ -39,12 +39,12 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
     //Exo 2.9.3以上版本，针对某些版本，无法进行seek
-    implementation ('com.google.android.exoplayer:exoplayer:2.9.2') {
+    api ('com.google.android.exoplayer:exoplayer:2.9.2') {
         exclude group: 'com.google.android.exoplayer', module: 'exoplayer-core'
         exclude group: 'com.google.android.exoplayer', module: 'exoplayer-hls'
     }
     //IJKPlayer
-    implementation 'tv.danmaku.ijk.media:ijkplayer-java:0.8.8'
+    api 'tv.danmaku.ijk.media:ijkplayer-java:0.8.8'
     implementation project(path: ':ffmpeg')
     implementation project(path: ':core')
     implementation project(path: ':hls')
