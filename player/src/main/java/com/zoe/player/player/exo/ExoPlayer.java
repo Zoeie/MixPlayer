@@ -112,7 +112,7 @@ public class ExoPlayer implements Player {
         exoPlayer.prepare(getMediaSource(configure));
         exoPlayer.setPlayWhenReady(true);
         int startPosition = configure.getStartPosition();
-        if (startPosition>0){
+        if (startPosition>=0){
             exoPlayer.seekTo(startPosition);
         }
     }
