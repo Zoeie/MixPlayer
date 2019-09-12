@@ -225,23 +225,9 @@ public class ExoPlayerHelper {
      */
     private void handleSSLHandshake() {
         try {
-            TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
-                public X509Certificate[] getAcceptedIssuers() {
-                    return new X509Certificate[0];
-                }
-
-                @Override
-                public void checkClientTrusted(X509Certificate[] certs, String authType) {
-                }
-
-                @Override
-                public void checkServerTrusted(X509Certificate[] certs, String authType) {
-                }
-            }};
-
             SSLContext sc = SSLContext.getInstance("TLS");
             // trustAllCerts信任所有的证书
-            sc.init(null, trustAllCerts, new SecureRandom());
+            sc.init(null, getTurstAllManager(), new SecureRandom());
             CustomHostnameVerifier verifier = new CustomHostnameVerifier();
             HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
             HttpsURLConnection.setDefaultHostnameVerifier(verifier);
@@ -249,6 +235,25 @@ public class ExoPlayerHelper {
         }
     }
 
+    public static TrustManager[] getTurstAllManager() {
+        return new X509TrustManager[] { new MyX509TrustManager() };
+    }
+
+
+    private static class MyX509TrustManager implements X509TrustManager{
+
+        public X509Certificate[] getAcceptedIssuers() {
+            return new X509Certificate[0];
+        }
+
+        @Override
+        public void checkClientTrusted(X509Certificate[] certs, String authType) {
+        }
+
+        @Override
+        public void checkServerTrusted(X509Certificate[] certs, String authType) {
+        }
+    }
 
     private static class CustomHostnameVerifier implements HostnameVerifier{
         @Override
@@ -256,4 +261,6 @@ public class ExoPlayerHelper {
             return true;
         }
     }
+
+
 }

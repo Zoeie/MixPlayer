@@ -32,8 +32,8 @@ public interface PlayListener {
     void onPlayError(Exception e, int errorCode);
 
     //字幕变更
-    void onSubtitleChanged(SubtitleData subtitle);
+    default void onSubtitleChanged(SubtitleData subtitle){}
 
     //视频宽高
-    void onVideoSizeChanged(int width, int height);
+    default void onVideoSizeChanged(int width, int height){}
 }
