@@ -4,8 +4,6 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaFormat;
 import android.media.MediaPlayer;
-import android.media.PlaybackParams;
-import android.os.Build;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
@@ -158,6 +156,7 @@ public class MediaPlayerPlayer implements Player, SurfaceHolder.Callback, MediaP
 
     @Override
     public int getBufferedPercentage() {
+        Log.d(TAG, "getBufferedPercentage: ");
         return mPercent;
     }
 
@@ -267,6 +266,7 @@ public class MediaPlayerPlayer implements Player, SurfaceHolder.Callback, MediaP
 
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
+        Log.d(TAG, "onError: what:"+what);
         if (mPlayListener != null) {
             mPlayListener.onPlayError(new Exception("MediaPlayer exception"), what);
         }
@@ -275,11 +275,36 @@ public class MediaPlayerPlayer implements Player, SurfaceHolder.Callback, MediaP
 
     @Override
     public void onBufferingUpdate(MediaPlayer mp, int percent) {
+        Log.d(TAG, "onBufferingUpdate: percent:"+percent);
         mPercent = percent;
     }
 
     @Override
     public boolean onInfo(MediaPlayer mp, int what, int extra) {
+        Log.d(TAG, "onInfo: what:"+what+","+isPlaying());
+        switch (what) {
+            case MediaPlayer.MEDIA_INFO_BUFFERING_START:
+                Log.d(TAG, "onInfo: MEDIA_INFO_BUFFERING_START");
+                if (mPlayListener != null) {
+                    mPlayListener.onBufferingStart();
+                }
+                break;
+            case MediaPlayer.MEDIA_INFO_BUFFERING_END:
+                Log.d(TAG, "MEDIA_INFO_BUFFERING_END");
+                if (mPlayListener != null) {
+                    mPlayListener.onBufferingEnd();
+                }
+                break;
+            case MediaPlayer.MEDIA_INFO_VIDEO_TRACK_LAGGING://视频编码过于复杂，解码器无法足够快的解码出帧
+                Log.d(TAG, "MEDIA_INFO_VIDEO_TRACK_LAGGING");
+                break;
+            case MediaPlayer.MEDIA_INFO_BAD_INTERLEAVING://音视频错乱传输，视频跟音频不同步
+                Log.d(TAG, "MEDIA_INFO_BAD_INTERLEAVING");
+                break;
+            case MediaPlayer.MEDIA_INFO_UNKNOWN:
+                Log.e(TAG, "UNKNOWN...");
+                break;
+        }
         return false;
     }
 

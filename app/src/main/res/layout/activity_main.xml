@@ -41,13 +41,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+            android:layout_below="@+id/change_source"
+        android:layout_height="match_parent">
+        <SurfaceView
+            android:layout_centerInParent="true"
+            android:id="@+id/surface_view"
+            android:layout_width="480dp"
+            android:layout_height="270dp" />
 
-    <SurfaceView
-        android:layout_centerInParent="true"
-        android:layout_below="@+id/change_source"
-        android:id="@+id/surface_view"
-        android:layout_width="480dp"
-        android:layout_height="270dp" />
+        <ProgressBar
+            android:id="@+id/pb"
+            android:visibility="invisible"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+
+
 
     <TextView
         android:layout_marginStart="@dimen/dpi_20"

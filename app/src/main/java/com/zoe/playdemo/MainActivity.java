@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -24,9 +25,7 @@ import com.zoe.player.player.base.SourceConfigure;
 import com.zoe.player.player.base.SubtitleData;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Formatter;
-import java.util.List;
 import java.util.Locale;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -50,9 +49,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //    private static final String VIDEO_URL = "https://zy.512wx.com/20171130/EI2p4dYT/index.m3u8";
 //    private static final String VIDEO_URL = "http://yfvod.lemmovie.com/vod/437332CF8EA1444B8A06FB923CEC9FDC/master.m3u8?pt=0";
 //    private static final String VIDEO_URL = "https://www2.yuboyun.com/hls/2018/07/29/SqB3V9P4/playlist.m3u8";
-    private static final String VIDEO_URL = "http://cdn.lemmovie.com/live/1e54d0e5-7b1a-42b0-a4f0-26610627ee4c.m3u8";
+//    private static final String VIDEO_URL = "http://cdn.lemmovie.com/live/1e54d0e5-7b1a-42b0-a4f0-26610627ee4c.m3u8";
 //    private static final String VIDEO_URL = "http://10.11.89.80:8080/timeshift/a678c957-ef44-4c5d-a2d9-99003bab05d5/master.m3u8";//时移;
 //    private static final String VIDEO_URL = "http://ts.lemmovie.com/a678c957-ef44-4c5d-a2d9-99003bab05d5/master.m3u8";//J2时移
+    private static final String VIDEO_URL = "http://ts.lemmovie.com/3dc11d9d-c9bd-409d-8bd7-3acec1f2ffb6/master.m3u8";//时移 马来西亚 NTV7
+//    private static final String VIDEO_URL = "http://10.20.63.222:1977/hls/3_VN_FOX_MOVIES_HD.m3u8";//exo显示第一帧卡住
     private MySeekBar seekBar;
     private TextView            tvPassTime;
     private TextView            tvBufferTime;
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView tvDuration;
     private String[] mPaths;
     private int pathIndex=0;
+    private ProgressBar mPb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button btnChange = findViewById(R.id.change_source);
         btnChange.setOnClickListener(this);
 
+        mPb = findViewById(R.id.pb);
         seekBar = findViewById(R.id.sb_progress);
         seekBar.setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -155,18 +158,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onBufferingStart() {
+                mPb.setVisibility(View.VISIBLE);
                 bufferTime = System.currentTimeMillis();
                 LogUtil.d("onBufferingStart");
             }
 
             @Override
             public void onBufferingEnd() {
+                mPb.setVisibility(View.INVISIBLE);
                 LogUtil.d("onBufferingEnd time:"+(System.currentTimeMillis() - bufferTime));
             }
 
             @Override
             public void onSeekProcessed() {
-
+                LogUtil.d("onSeekProcessed");
             }
 
             @Override
@@ -181,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 seekBar.setSecondaryProgress(secondaryProgress);
                 tvPassTime.setText(String.format("当前进度：%s", formatPlayTime(currentPos)));
                 tvBufferTime.setText(String.format("缓冲进度：%s", formatPlayTime(bufferedPos)));
-                LogUtil.i("duration:"+duration+",currentPos:"+currentPos);
+                LogUtil.i("duration:"+duration+",currentPos:"+currentPos+",bufferedPos:"+bufferedPos);
             }
 
             @Override
@@ -191,7 +196,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onPlayError(Exception e, int errorCode) {
-                LogUtil.d("onPlayError");
+                LogUtil.d("onPlayError："+e.getMessage());
             }
 
             @Override
@@ -207,12 +212,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onVideoSizeChanged(int width, int height) {
 
             }
-        }, PlayConstant.EXO_PLAYER, new PlayConfigure(surfaceView));
+        }, PlayConstant.MEDIA_PLAYER, new PlayConfigure(surfaceView));
        /* List<String> subtitleList = new ArrayList<>();
         subtitleList.add("http://img.lemmovie.com/sub/Game.of.Thrones.S08E01_cn.srt");
         subtitleList.add("http://img.lemmovie.com/sub/quanyou8_1_track3_en.srt");
         SourceConfigure configure = new SourceConfigure(VIDEO_URL,subtitleList);*/
         SourceConfigure configure = new SourceConfigure(VIDEO_URL);
+
+        String path = Environment.getExternalStorageDirectory() + File.separator + "tf.m3u8";
+//        SourceConfigure configure = new SourceConfigure(path);
+
         iPlayer.play(configure);
     }
 
