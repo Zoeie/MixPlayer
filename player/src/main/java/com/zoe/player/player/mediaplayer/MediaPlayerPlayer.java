@@ -5,6 +5,7 @@ import android.media.AudioManager;
 import android.media.MediaFormat;
 import android.media.MediaPlayer;
 import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -27,22 +28,46 @@ import androidx.annotation.Nullable;
 
 public class MediaPlayerPlayer implements Player, SurfaceHolder.Callback, MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnInfoListener, MediaPlayer.OnSeekCompleteListener, MediaPlayer.OnCompletionListener, SubtitleEngine.OnSubtitleChangeListener, SubtitleEngine.OnSubtitlePreparedListener, MediaPlayer.OnVideoSizeChangedListener {
 
-    private static final String TAG = "MediaPlayerPlayer";
-    private Context mContext;
-    private PlayListener mPlayListener;
+    private static final String  TAG           = "MediaPlayerPlayer";
+    private Context              mContext;
+    private PlayListener         mPlayListener;
     private MediaPlayerConfigure mConfigure;
-    private MediaPlayer mMediaPlayer;
-    private SurfaceHolder mHolder;
-    private Handler handler;
-    private SourceConfigure mSourceConfigure;
-    private int mPercent = -1;
-    private SubtitleEngine mSubtitleEngine;
+    private MediaPlayer          mMediaPlayer;
+    private SurfaceHolder        mHolder;
+    private Handler              mHandler;
+    private SourceConfigure      mSourceConfigure;
+    private int                  mPercent      = -1;
+    private SubtitleEngine       mSubtitleEngine;
+    private int                  mSeekPosition =-1;//记录每次seek完成后的position
+    public static final int      CODE_TIMEOUT = -10000;//播放超时
+    public  int                  mTimeout = 30 * 1000;//播放超时时间
+    public static final int MSG_CHECK_BUFFER=100;//对比进度是否应该显示缓冲
 
     MediaPlayerPlayer(Context context, PlayListener playListener, MediaPlayerConfigure mediaPlayerPlayerConfigure) {
         mContext = context;
         mPlayListener = playListener;
         mConfigure = mediaPlayerPlayerConfigure;
-        handler = new Handler();
+        mHandler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                switch (msg.what) {
+                    case MSG_CHECK_BUFFER:
+                        long currentPosition = getCurrentPosition();
+                        if (currentPosition>0&&currentPosition==mSeekPosition){
+                            Log.d(TAG, "executeProgress:onBufferingStart ");
+                            mPlayListener.onBufferingStart();
+                        }else if (currentPosition>0&&currentPosition>mSeekPosition){
+                            mPlayListener.onBufferingEnd();
+                            Log.d(TAG, "executeProgress:onBufferingEnd ");
+                            mSeekPosition=-1;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        };
         buildPlayer();
     }
 
@@ -96,6 +121,7 @@ public class MediaPlayerPlayer implements Player, SurfaceHolder.Callback, MediaP
         }
         mMediaPlayer.reset();
         try {
+            startTimeOutBuffer();
             mMediaPlayer.setDataSource(configure.getPlayUrl());
             mMediaPlayer.prepareAsync();
         } catch (IOException e) {
@@ -106,6 +132,7 @@ public class MediaPlayerPlayer implements Player, SurfaceHolder.Callback, MediaP
     @Override
     public void seekTo(long ms) {
         mMediaPlayer.seekTo((int) ms);
+        Log.i(TAG, "seekTo: "+ms);
     }
 
     @Override
@@ -125,7 +152,8 @@ public class MediaPlayerPlayer implements Player, SurfaceHolder.Callback, MediaP
 
     @Override
     public void release() {
-        handler.removeCallbacks(progressAction);
+        cancelTimeOutBuffer();
+        mHandler.removeCallbacks(progressAction);
         if(mMediaPlayer != null) {
             mMediaPlayer.stop();
             mMediaPlayer.release();
@@ -156,7 +184,6 @@ public class MediaPlayerPlayer implements Player, SurfaceHolder.Callback, MediaP
 
     @Override
     public int getBufferedPercentage() {
-        Log.d(TAG, "getBufferedPercentage: ");
         return mPercent;
     }
 
@@ -241,6 +268,7 @@ public class MediaPlayerPlayer implements Player, SurfaceHolder.Callback, MediaP
 
     @Override
     public void onPrepared(MediaPlayer mp) {
+        cancelTimeOutBuffer();
         if (mPlayListener != null) {
             mPlayListener.onPlayPrepared();
         }
@@ -266,7 +294,8 @@ public class MediaPlayerPlayer implements Player, SurfaceHolder.Callback, MediaP
 
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
-        Log.d(TAG, "onError: what:"+what);
+        Log.e(TAG, "onError: what:"+what);
+        cancelTimeOutBuffer();
         if (mPlayListener != null) {
             mPlayListener.onPlayError(new Exception("MediaPlayer exception"), what);
         }
@@ -288,12 +317,17 @@ public class MediaPlayerPlayer implements Player, SurfaceHolder.Callback, MediaP
                 if (mPlayListener != null) {
                     mPlayListener.onBufferingStart();
                 }
+                startTimeOutBuffer();
+                break;
+            case MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START:
+                Log.d(TAG, "onInfo: MEDIA_INFO_VIDEO_RENDERING_START");
                 break;
             case MediaPlayer.MEDIA_INFO_BUFFERING_END:
                 Log.d(TAG, "MEDIA_INFO_BUFFERING_END");
                 if (mPlayListener != null) {
                     mPlayListener.onBufferingEnd();
                 }
+                cancelTimeOutBuffer();
                 break;
             case MediaPlayer.MEDIA_INFO_VIDEO_TRACK_LAGGING://视频编码过于复杂，解码器无法足够快的解码出帧
                 Log.d(TAG, "MEDIA_INFO_VIDEO_TRACK_LAGGING");
@@ -312,11 +346,14 @@ public class MediaPlayerPlayer implements Player, SurfaceHolder.Callback, MediaP
     public void onSeekComplete(MediaPlayer mp) {
         if (mPlayListener != null) {
             mPlayListener.onSeekProcessed();
+            mSeekPosition=mp.getCurrentPosition();
+            Log.i(TAG, "onSeekComplete: "+mSeekPosition+"-"+getCurrentPosition());
         }
     }
 
     @Override
     public void onCompletion(MediaPlayer mp) {
+        cancelTimeOutBuffer();
         if (mPlayListener != null) {
             mPlayListener.onPlayEnd();
         }
@@ -325,15 +362,18 @@ public class MediaPlayerPlayer implements Player, SurfaceHolder.Callback, MediaP
     private void executeProgress() {
         long position = mMediaPlayer == null ? 0 : mMediaPlayer.getCurrentPosition();
         // Remove scheduled updates.
-        handler.removeCallbacks(progressAction);
+        mHandler.removeCallbacks(progressAction);
         long delayMs = PlayConstant.PROGRESS_INTERVAL - (position % PlayConstant.PROGRESS_INTERVAL);
         if (delayMs < 200) {
             delayMs += PlayConstant.PROGRESS_INTERVAL;
         }
         if (mPlayListener != null) {
             mPlayListener.onProgress();
+            if (mSeekPosition!=-1){
+                mHandler.sendEmptyMessageDelayed(MSG_CHECK_BUFFER,1500);
+            }
         }
-        handler.postDelayed(progressAction, delayMs);
+        mHandler.postDelayed(progressAction, delayMs);
     }
 
     private final Runnable progressAction = this::executeProgress;
@@ -365,4 +405,40 @@ public class MediaPlayerPlayer implements Player, SurfaceHolder.Callback, MediaP
             mPlayListener.onVideoSizeChanged(width, height);
         }
     }
+
+
+    /**
+     * 启动播放超时监听
+     */
+    protected void startTimeOutBuffer() {
+        if (mHandler !=null){
+            mHandler.postDelayed(mTimeOutRunnable, mTimeout);
+        }
+
+    }
+
+    /**
+     * 取消播放超时监听
+     */
+    protected void cancelTimeOutBuffer() {
+        if (mHandler !=null){
+            mHandler.removeCallbacks(mTimeOutRunnable);
+        }
+        mSeekPosition=-1;
+    }
+
+    /**
+     * 播放超时
+     */
+    private Runnable mTimeOutRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (mPlayListener != null) {
+                Log.w(TAG, "run: play Timeout");
+                mPlayListener.onPlayError(new Exception("play Timeout"),CODE_TIMEOUT);
+            }
+        }
+    };
+
+
 }
