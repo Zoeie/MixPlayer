@@ -55,4 +55,6 @@ public interface Player {
     void switchSubtitle(int index);
 
     void switchSpeed(float speed);
+
+    default void setUserAgent(String userAgent) {}
 }

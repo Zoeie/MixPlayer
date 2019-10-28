@@ -69,6 +69,7 @@ public class ExoPlayer implements Player {
     private static String DEFAULT_CACHE_PATH = "sdcard/exo"; //默认的缓存路径
     private static final int MAX_FILE_SIZE = 25 * 1024 * 1024;
     private SourceConfigure mCurrentPlayInfo=null;//当前播放节目的信息
+    private String userAgent;
 
     public ExoPlayer(Context context, PlayListener playListener, ExoConfigure exoConfigure) {
         exoPlayerHelper = new ExoPlayerHelper();
@@ -85,6 +86,7 @@ public class ExoPlayer implements Player {
         exoPlayer.addVideoListener(videoListener);
         exoPlayer.addListener(eventListener);
         exoPlayer.addTextOutput(mOutput);
+        userAgent = Util.getUserAgent(mContext, "ExoPlayer");
     }
 
     @Override
@@ -123,7 +125,6 @@ public class ExoPlayer implements Player {
         MediaSource mediaSource;
         int contentType = inferContentType(playUrl);
         DataSource.Factory factory;
-        String userAgent = Util.getUserAgent(mContext, "videoExoPlayer");
         if(configure.isCache()) {
             CacheManager cacheManager = CacheManager.getInstance(mContext, configure.getPlayUrl(),new File(DEFAULT_CACHE_PATH));
             factory = new CacheDataSourceFactory(mContext, MAX_FILE_SIZE, cacheManager.getCache());
@@ -199,7 +200,7 @@ public class ExoPlayer implements Player {
                 mimeType, // The mime type. Must be set correctly.
                 C.SELECTION_FLAG_DEFAULT, // Selection flags for the track.
                 getSubtitleLanguage(subtitleUrl)); // The subtitle language. May be null.
-        DataSource.Factory factory = new DefaultDataSourceFactory(mContext, Util.getUserAgent(mContext, "subtitlePlayer"));
+        DataSource.Factory factory = new DefaultDataSourceFactory(mContext, userAgent);
         return new SingleSampleMediaSource.Factory(factory)
                 .createMediaSource(Uri.parse(subtitleUrl), subtitleFormat, C.TIME_UNSET);
     }
@@ -514,4 +515,9 @@ public class ExoPlayer implements Player {
             }
         }
     };
+
+    @Override
+    public void setUserAgent(String userAgent) {
+        this.userAgent = userAgent;
+    }
 }
