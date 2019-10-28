@@ -54,6 +54,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //    private static final String VIDEO_URL = "http://ts.lemmovie.com/a678c957-ef44-4c5d-a2d9-99003bab05d5/master.m3u8";//J2时移
     private static final String VIDEO_URL = "http://vod.lemmovie.com/vod/0e549fe7-2acf-64b1-dcec-6353d87f17de0.m3u8";//时移 马来西亚 NTV7
 //    private static final String VIDEO_URL = "http://10.20.63.222:1977/hls/3_VN_FOX_MOVIES_HD.m3u8";//exo显示第一帧卡住
+//    private static final String VIDEO_URL = "http://10.20.63.222:1977/hls/6_World_Match_RU.m3u8";
+//    private static final String VIDEO_URL = "http://ts.lemmovie.com/ab2ffad6-acc9-4595-acf3-467626c22fb5/master.m3u8";//AOD时移
+//    private static final String VIDEO_URL = "http://ts.lemmovie.com/68cd46a7-3bf1-4406-add7-5474a1d49948/master.m3u8";
     private MySeekBar seekBar;
     private TextView            tvPassTime;
     private TextView            tvBufferTime;
@@ -186,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 seekBar.setSecondaryProgress(secondaryProgress);
                 tvPassTime.setText(String.format("当前进度：%s", formatPlayTime(currentPos)));
                 tvBufferTime.setText(String.format("缓冲进度：%s", formatPlayTime(bufferedPos)));
-                LogUtil.i("duration:"+duration+",currentPos:"+currentPos+",bufferedPos:"+bufferedPos);
+//                LogUtil.i("duration:"+duration+",currentPos:"+currentPos+",bufferedPos:"+bufferedPos);
             }
 
             @Override
@@ -196,7 +199,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onPlayError(Exception e, int errorCode) {
-                LogUtil.d("onPlayError："+e.getMessage());
+                LogUtil.e("onPlayError："+e.getMessage()+",errorCode:"+errorCode);
             }
 
             @Override
@@ -219,7 +222,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         SourceConfigure configure = new SourceConfigure(VIDEO_URL,subtitleList);*/
         SourceConfigure configure = new SourceConfigure(VIDEO_URL);
 
-        String path = Environment.getExternalStorageDirectory() + File.separator + "tf.m3u8";
+        String path = Environment.getExternalStorageDirectory() + File.separator + "3.ts";
 //        SourceConfigure configure = new SourceConfigure(path);
         iPlayer.play(configure);
     }
