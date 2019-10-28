@@ -665,7 +665,14 @@ public class DefaultHttpDataSource extends BaseDataSource implements HttpDataSou
       readLength = (int) Math.min(readLength, bytesRemaining);
     }
 
-    int read = inputStream.read(buffer, offset, readLength);
+    int read;
+    try {
+      read = inputStream.read(buffer, offset, readLength);
+    } catch (ProtocolException e) {
+      //当出现read抛ProtocolException时，强行设置为读取到文件最后，随即跳过该片，去访问下一片。
+      bytesRead = bytesToRead;
+      return C.RESULT_END_OF_INPUT;
+    }
     if (read == -1) {
       if (bytesToRead != C.LENGTH_UNSET) {
         // End of stream reached having not read sufficient data.
