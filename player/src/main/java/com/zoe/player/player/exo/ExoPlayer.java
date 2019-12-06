@@ -22,11 +22,7 @@ import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.MergingMediaSource;
 import com.google.android.exoplayer2.source.SingleSampleMediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
-import com.google.android.exoplayer2.source.dash.DashMediaSource;
-import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
-import com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource;
-import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
 import com.google.android.exoplayer2.text.Cue;
 import com.google.android.exoplayer2.text.TextOutput;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
@@ -140,15 +136,6 @@ public class ExoPlayer implements Player {
             }
         }
         switch (contentType) {
-            case C.TYPE_SS:
-                mediaSource = new SsMediaSource.Factory(
-                        new DefaultSsChunkSource.Factory(factory),
-                        new DefaultDataSourceFactory(mContext, userAgent)).createMediaSource(Uri.parse(playUrl));
-                break;
-            case C.TYPE_DASH:
-                mediaSource = new DashMediaSource.Factory(new DefaultDashChunkSource.Factory(factory),
-                        new DefaultDataSourceFactory(mContext, userAgent)).createMediaSource(Uri.parse(playUrl));
-                break;
             case C.TYPE_HLS:
                 mediaSource = new HlsMediaSource.Factory(factory).createMediaSource(Uri.parse(playUrl));
                 break;
