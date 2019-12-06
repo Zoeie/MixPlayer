@@ -5,15 +5,12 @@ import android.content.Context;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import com.google.android.exoplayer2.upstream.cache.Cache;
-import com.google.android.exoplayer2.upstream.cache.CacheSpan;
-import com.google.android.exoplayer2.upstream.cache.CacheUtil;
-import com.google.android.exoplayer2.upstream.cache.ContentMetadata;
-import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor;
-import com.google.android.exoplayer2.upstream.cache.SimpleCache;
+import com.zoe.android.exoplayer2.upstream.cache.Cache;
+import com.zoe.android.exoplayer2.upstream.cache.CacheUtil;
+import com.zoe.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor;
+import com.zoe.android.exoplayer2.upstream.cache.SimpleCache;
 
 import java.io.File;
-import java.util.NavigableSet;
 
 /**
  * author zoe

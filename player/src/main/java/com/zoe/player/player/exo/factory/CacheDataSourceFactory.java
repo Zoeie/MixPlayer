@@ -2,15 +2,15 @@ package com.zoe.player.player.exo.factory;
 
 import android.content.Context;
 
-import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
-import com.google.android.exoplayer2.upstream.FileDataSource;
-import com.google.android.exoplayer2.upstream.cache.Cache;
-import com.google.android.exoplayer2.upstream.cache.CacheDataSink;
-import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
-import com.google.android.exoplayer2.util.Util;
+import com.zoe.android.exoplayer2.upstream.DataSource;
+import com.zoe.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.zoe.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.zoe.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
+import com.zoe.android.exoplayer2.upstream.FileDataSource;
+import com.zoe.android.exoplayer2.upstream.cache.Cache;
+import com.zoe.android.exoplayer2.upstream.cache.CacheDataSink;
+import com.zoe.android.exoplayer2.upstream.cache.CacheDataSource;
+import com.zoe.android.exoplayer2.util.Util;
 import com.zoe.player.R;
 
 /**

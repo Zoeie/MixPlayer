@@ -10,28 +10,28 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.android.exoplayer2.C;
-import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.Format;
-import com.google.android.exoplayer2.PlaybackParameters;
-import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.Timeline;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.MergingMediaSource;
-import com.google.android.exoplayer2.source.SingleSampleMediaSource;
-import com.google.android.exoplayer2.source.TrackGroupArray;
-import com.google.android.exoplayer2.source.hls.HlsMediaSource;
-import com.google.android.exoplayer2.text.Cue;
-import com.google.android.exoplayer2.text.TextOutput;
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
-import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.util.MimeTypes;
-import com.google.android.exoplayer2.util.Util;
-import com.google.android.exoplayer2.video.VideoListener;
+import com.zoe.android.exoplayer2.C;
+import com.zoe.android.exoplayer2.ExoPlaybackException;
+import com.zoe.android.exoplayer2.Format;
+import com.zoe.android.exoplayer2.PlaybackParameters;
+import com.zoe.android.exoplayer2.SimpleExoPlayer;
+import com.zoe.android.exoplayer2.Timeline;
+import com.zoe.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.zoe.android.exoplayer2.source.ExtractorMediaSource;
+import com.zoe.android.exoplayer2.source.MediaSource;
+import com.zoe.android.exoplayer2.source.MergingMediaSource;
+import com.zoe.android.exoplayer2.source.SingleSampleMediaSource;
+import com.zoe.android.exoplayer2.source.TrackGroupArray;
+import com.zoe.android.exoplayer2.source.hls.HlsMediaSource;
+import com.zoe.android.exoplayer2.text.Cue;
+import com.zoe.android.exoplayer2.text.TextOutput;
+import com.zoe.android.exoplayer2.trackselection.TrackSelectionArray;
+import com.zoe.android.exoplayer2.upstream.DataSource;
+import com.zoe.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.zoe.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.zoe.android.exoplayer2.util.MimeTypes;
+import com.zoe.android.exoplayer2.util.Util;
+import com.zoe.android.exoplayer2.video.VideoListener;
 import com.zoe.player.player.PlayConstant;
 import com.zoe.player.player.base.PlayListener;
 import com.zoe.player.player.base.Player;
@@ -234,7 +234,7 @@ public class ExoPlayer implements Player {
         }
     };
 
-    private com.google.android.exoplayer2.Player.EventListener eventListener = new com.google.android.exoplayer2.Player.EventListener() {
+    private com.zoe.android.exoplayer2.Player.EventListener eventListener = new com.zoe.android.exoplayer2.Player.EventListener() {
 
         @Override
         public void onTimelineChanged(Timeline timeline, @Nullable Object manifest, int reason) {
@@ -254,16 +254,16 @@ public class ExoPlayer implements Player {
         @Override
         public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
             switch (playbackState) {
-                case com.google.android.exoplayer2.Player.STATE_IDLE:
+                case com.zoe.android.exoplayer2.Player.STATE_IDLE:
 
                     break;
-                case com.google.android.exoplayer2.Player.STATE_BUFFERING:
+                case com.zoe.android.exoplayer2.Player.STATE_BUFFERING:
                     isBuffering = true;
                     if (mPlayListener != null) {
                         mPlayListener.onBufferingStart();
                     }
                     break;
-                case com.google.android.exoplayer2.Player.STATE_READY:
+                case com.zoe.android.exoplayer2.Player.STATE_READY:
                     if (!isPrepared) {
                         executeProgress();
                         if (mPlayListener != null) {
@@ -277,7 +277,7 @@ public class ExoPlayer implements Player {
                         isBuffering = false;
                     }
                     break;
-                case com.google.android.exoplayer2.Player.STATE_ENDED:
+                case com.zoe.android.exoplayer2.Player.STATE_ENDED:
                     if (mPlayListener != null) {
                         mPlayListener.onPlayEnd();
                     }
@@ -468,10 +468,10 @@ public class ExoPlayer implements Player {
         // Remove scheduled updates.
         handler.removeCallbacks(progressAction);
         // Schedule an update if necessary.
-        int playbackState = exoPlayer == null ? com.google.android.exoplayer2.Player.STATE_IDLE : exoPlayer.getPlaybackState();
-        if (playbackState != com.google.android.exoplayer2.Player.STATE_IDLE && playbackState != com.google.android.exoplayer2.Player.STATE_ENDED) {
+        int playbackState = exoPlayer == null ? com.zoe.android.exoplayer2.Player.STATE_IDLE : exoPlayer.getPlaybackState();
+        if (playbackState != com.zoe.android.exoplayer2.Player.STATE_IDLE && playbackState != com.zoe.android.exoplayer2.Player.STATE_ENDED) {
             long delayMs;
-            if (exoPlayer.getPlayWhenReady() && playbackState == com.google.android.exoplayer2.Player.STATE_READY) {
+            if (exoPlayer.getPlayWhenReady() && playbackState == com.zoe.android.exoplayer2.Player.STATE_READY) {
                 delayMs = PlayConstant.PROGRESS_INTERVAL - (position % PlayConstant.PROGRESS_INTERVAL);
                 if (delayMs < 200) {
                     delayMs += PlayConstant.PROGRESS_INTERVAL;

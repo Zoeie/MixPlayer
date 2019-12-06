@@ -2,10 +2,10 @@ package com.zoe.player.player.exo.factory;
 
 import android.content.Context;
 
-import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultDataSource;
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
-import com.google.android.exoplayer2.upstream.TransferListener;
+import com.zoe.android.exoplayer2.upstream.DataSource;
+import com.zoe.android.exoplayer2.upstream.DefaultDataSource;
+import com.zoe.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
+import com.zoe.android.exoplayer2.upstream.TransferListener;
 
 import androidx.annotation.Nullable;
 
