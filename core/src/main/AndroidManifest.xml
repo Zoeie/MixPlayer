@@ -15,6 +15,6 @@
 -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.google.android.exoplayer2.core">
+    package="com.zoe.android.exoplayer2.core">
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 </manifest>

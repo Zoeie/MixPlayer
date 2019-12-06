@@ -68,7 +68,7 @@ public abstract class DownloadAction {
     // Full class names used for constructor args so the LINT rule triggers if any of them move.
     try {
       // LINT.IfChange
-      clazz = Class.forName("com.google.android.exoplayer2.source.dash.offline.DashDownloadAction");
+      clazz = Class.forName("com.zoe.android.exoplayer2.source.dash.offline.DashDownloadAction");
       // LINT.ThenChange(../../../../../../../../../dash/proguard-rules.txt)
       deserializers[count++] = getDeserializer(clazz);
     } catch (Exception e) {
@@ -76,7 +76,7 @@ public abstract class DownloadAction {
     }
     try {
       // LINT.IfChange
-      clazz = Class.forName("com.google.android.exoplayer2.source.hls.offline.HlsDownloadAction");
+      clazz = Class.forName("com.zoe.android.exoplayer2.source.hls.offline.HlsDownloadAction");
       // LINT.ThenChange(../../../../../../../../../hls/proguard-rules.txt)
       deserializers[count++] = getDeserializer(clazz);
     } catch (Exception e) {
@@ -86,7 +86,7 @@ public abstract class DownloadAction {
       // LINT.IfChange
       clazz =
           Class.forName(
-              "com.google.android.exoplayer2.source.smoothstreaming.offline.SsDownloadAction");
+              "com.zoe.android.exoplayer2.source.smoothstreaming.offline.SsDownloadAction");
       // LINT.ThenChange(../../../../../../../../../smoothstreaming/proguard-rules.txt)
       deserializers[count++] = getDeserializer(clazz);
     } catch (Exception e) {

@@ -5,7 +5,7 @@ instantiate a `HlsMediaSource` and pass it to `ExoPlayer.prepare`.
 
 ## Links ##
 
-* [Javadoc][]: Classes matching `com.google.android.exoplayer2.source.hls.*`
+* [Javadoc][]: Classes matching `com.zoe.android.exoplayer2.source.hls.*`
   belong to this module.
 
 [Javadoc]: https://google.github.io/ExoPlayer/doc/reference/index.html

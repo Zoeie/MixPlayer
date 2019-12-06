@@ -14,4 +14,4 @@
      limitations under the License.
 -->
 
-<manifest package="com.google.android.exoplayer2.ext.ffmpeg"/>
+<manifest package="com.zoe.android.exoplayer2.ext.ffmpeg"/>

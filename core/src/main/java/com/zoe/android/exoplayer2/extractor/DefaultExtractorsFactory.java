@@ -60,7 +60,7 @@ public final class DefaultExtractorsFactory implements ExtractorsFactory {
     try {
       // LINT.IfChange
       flacExtractorConstructor =
-          Class.forName("com.google.android.exoplayer2.ext.flac.FlacExtractor")
+          Class.forName("com.zoe.android.exoplayer2.ext.flac.FlacExtractor")
               .asSubclass(Extractor.class)
               .getConstructor();
       // LINT.ThenChange(../../../../../../../../proguard-rules.txt)

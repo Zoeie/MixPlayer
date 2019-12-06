@@ -321,7 +321,7 @@ public class CustomDataSource implements DataSource {
         if (rtmpDataSource == null) {
             try {
                 // LINT.IfChange
-                Class<?> clazz = Class.forName("com.google.android.exoplayer2.ext.rtmp.RtmpDataSource");
+                Class<?> clazz = Class.forName("com.zoe.android.exoplayer2.ext.rtmp.RtmpDataSource");
                 rtmpDataSource = (DataSource) clazz.getConstructor().newInstance();
                 // LINT.ThenChange(../../../../../../../../proguard-rules.txt)
                 addListenersToDataSource(rtmpDataSource);
