@@ -52,11 +52,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //    private static final String VIDEO_URL = "http://cdn.lemmovie.com/live/1e54d0e5-7b1a-42b0-a4f0-26610627ee4c.m3u8";
 //    private static final String VIDEO_URL = "http://10.11.89.80:8080/timeshift/a678c957-ef44-4c5d-a2d9-99003bab05d5/master.m3u8";//时移;
 //    private static final String VIDEO_URL = "http://ts.lemmovie.com/a678c957-ef44-4c5d-a2d9-99003bab05d5/master.m3u8";//J2时移
-    private static final String VIDEO_URL = "http://vod.lemmovie.com/vod/0e549fe7-2acf-64b1-dcec-6353d87f17de0.m3u8";//时移 马来西亚 NTV7
+//    private static final String VIDEO_URL = "http://vod.lemmovie.com/vod/0e549fe7-2acf-64b1-dcec-6353d87f17de0.m3u8";//时移 马来西亚 NTV7
 //    private static final String VIDEO_URL = "http://10.20.63.222:1977/hls/3_VN_FOX_MOVIES_HD.m3u8";//exo显示第一帧卡住
 //    private static final String VIDEO_URL = "http://10.20.63.222:1977/hls/6_World_Match_RU.m3u8";
 //    private static final String VIDEO_URL = "http://ts.lemmovie.com/ab2ffad6-acc9-4595-acf3-467626c22fb5/master.m3u8";//AOD时移
 //    private static final String VIDEO_URL = "http://ts.lemmovie.com/68cd46a7-3bf1-4406-add7-5474a1d49948/master.m3u8";
+    private static final String VIDEO_URL = "http://vod.lemmovie.com/vod/82a57b0a-744c-0c07-8074-e1b015a3c47e.m3u8";//普通点播
     private MySeekBar seekBar;
     private TextView            tvPassTime;
     private TextView            tvBufferTime;
@@ -215,7 +216,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onVideoSizeChanged(int width, int height) {
 
             }
-        }, PlayConstant.EXO_PLAYER, new PlayConfigure(surfaceView));
+        }, PlayConstant.IJK_PLAYER, new PlayConfigure(surfaceView));
        /* List<String> subtitleList = new ArrayList<>();
         subtitleList.add("http://img.lemmovie.com/sub/Game.of.Thrones.S08E01_cn.srt");
         subtitleList.add("http://img.lemmovie.com/sub/quanyou8_1_track3_en.srt");
