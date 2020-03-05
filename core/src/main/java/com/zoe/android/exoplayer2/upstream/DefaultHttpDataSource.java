@@ -31,8 +31,10 @@ import java.io.InterruptedIOException;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
 import java.net.NoRouteToHostException;
 import java.net.ProtocolException;
+import java.net.Proxy;
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;
@@ -493,7 +495,10 @@ public class DefaultHttpDataSource extends BaseDataSource implements HttpDataSou
       boolean allowGzip,
       boolean followRedirects)
       throws IOException {
-    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+    // 创建代理服务器
+    InetSocketAddress addr = new InetSocketAddress("127.0.0.1", 8118);
+    Proxy proxy = new Proxy(Proxy.Type.HTTP, addr); // http 代理
+    HttpURLConnection connection = (HttpURLConnection) url.openConnection(proxy);
     connection.setConnectTimeout(connectTimeoutMillis);
     connection.setReadTimeout(readTimeoutMillis);
     if (defaultRequestProperties != null) {
