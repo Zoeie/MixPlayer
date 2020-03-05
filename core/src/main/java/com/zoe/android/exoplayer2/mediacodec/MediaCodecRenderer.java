@@ -1283,8 +1283,14 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
           return false;
         }
       } else {
-        outputIndex =
-            codec.dequeueOutputBuffer(outputBufferInfo, getDequeueOutputBufferTimeoutUs());
+        //此处捕获异常
+        try {
+          outputIndex =
+                  codec.dequeueOutputBuffer(outputBufferInfo, getDequeueOutputBufferTimeoutUs());
+        } catch (IllegalStateException e) {
+          processEndOfStream();
+          return false;
+        }
       }
 
       if (outputIndex < 0) {
