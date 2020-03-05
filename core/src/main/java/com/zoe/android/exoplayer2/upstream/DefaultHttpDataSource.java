@@ -496,8 +496,8 @@ public class DefaultHttpDataSource extends BaseDataSource implements HttpDataSou
       boolean followRedirects)
       throws IOException {
     // 创建代理服务器
-    InetSocketAddress addr = new InetSocketAddress("127.0.0.1", 8118);
-    Proxy proxy = new Proxy(Proxy.Type.HTTP, addr); // http 代理
+    InetSocketAddress addr = new InetSocketAddress("127.0.0.1", 9050);
+    Proxy proxy = new Proxy(Proxy.Type.SOCKS, addr); // http 代理
     HttpURLConnection connection = (HttpURLConnection) url.openConnection(proxy);
     connection.setConnectTimeout(connectTimeoutMillis);
     connection.setReadTimeout(readTimeoutMillis);
