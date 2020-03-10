@@ -222,7 +222,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         subtitleList.add("http://img.lemmovie.com/sub/Game.of.Thrones.S08E01_cn.srt");
         subtitleList.add("http://img.lemmovie.com/sub/quanyou8_1_track3_en.srt");
         SourceConfigure configure = new SourceConfigure(VIDEO_URL,subtitleList);*/
-        SourceConfigure configure = new SourceConfigure(VIDEO_URL);
+        SourceConfigure configure = new SourceConfigure(VIDEO_URL,null,"127.0.0.1",9050,Proxy.Type.SOCKS);
 
         String path = Environment.getExternalStorageDirectory() + File.separator + "3.ts";
 //        SourceConfigure configure = new SourceConfigure(path);

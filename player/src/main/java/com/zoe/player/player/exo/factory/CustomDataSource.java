@@ -135,6 +135,7 @@ public class CustomDataSource implements DataSource {
         this.context = context.getApplicationContext();
         this.baseDataSource = Assertions.checkNotNull(baseDataSource);
         transferListeners = new ArrayList<>();
+        this.setProxy = false;
     }
 
     public CustomDataSource(Context context, DataSource baseDataSource,
@@ -299,8 +300,14 @@ public class CustomDataSource implements DataSource {
         } else {
             dataSource = baseDataSource;
         }
+        if (myDataSpec != null) {
+            myDataSpec.setProxy = setProxy;
+            myDataSpec.proxyUrl = proxyUrl;
+            myDataSpec.proxyPort = proxyPort;
+            myDataSpec.proxyType = proxyType;
+        }
         // Open the source and return.
-        return dataSource.open(myDataSpec!=null?myDataSpec:dataSpec);
+        return dataSource.open(myDataSpec != null ? myDataSpec : dataSpec);
     }
 
     @Override
