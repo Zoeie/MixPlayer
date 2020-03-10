@@ -19,6 +19,7 @@ import com.zoe.android.exoplayer2.util.Util;
 import com.zoe.player.player.util.M3u8ParseUtil;
 
 import java.io.IOException;
+import java.net.Proxy;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -55,6 +56,26 @@ public class CustomDataSource implements DataSource {
 
     private @Nullable DataSource dataSource;
     private DataSpec myDataSpec=null;
+
+    /**
+     * 是否设置代理
+     */
+    public boolean setProxy = false;
+
+    /**
+     * 代理地址
+     */
+    public String proxyUrl;
+
+    /**
+     * 代理端口
+     */
+    public int proxyPort;
+
+    /**
+     * 代理方式
+     */
+    public Proxy.Type proxyType = Proxy.Type.HTTP;
 
     /**
      * Constructs a new instance, optionally configured to follow cross-protocol redirects.
@@ -114,6 +135,17 @@ public class CustomDataSource implements DataSource {
         this.context = context.getApplicationContext();
         this.baseDataSource = Assertions.checkNotNull(baseDataSource);
         transferListeners = new ArrayList<>();
+    }
+
+    public CustomDataSource(Context context, DataSource baseDataSource,
+                            String proxyUrl, int proxyPort, Proxy.Type proxyType) {
+        this.context = context.getApplicationContext();
+        this.baseDataSource = Assertions.checkNotNull(baseDataSource);
+        transferListeners = new ArrayList<>();
+        this.setProxy = true;
+        this.proxyUrl = proxyUrl;
+        this.proxyPort = proxyPort;
+        this.proxyType = proxyType;
     }
 
     /**
@@ -209,6 +241,10 @@ public class CustomDataSource implements DataSource {
 
     @Override
     public long open(DataSpec dataSpec) throws IOException {
+        dataSpec.setProxy = setProxy;
+        dataSpec.proxyUrl = proxyUrl;
+        dataSpec.proxyPort = proxyPort;
+        dataSpec.proxyType = proxyType;
         Assertions.checkState(dataSource == null);
         String ts = dataSpec.uri.toString();
         if (!TextUtils.isEmpty(ts) && !ts.contains(".m3u8")

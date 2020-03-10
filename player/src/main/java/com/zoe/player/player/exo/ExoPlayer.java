@@ -39,6 +39,7 @@ import com.zoe.player.player.base.SourceConfigure;
 import com.zoe.player.player.base.SubtitleData;
 import com.zoe.player.player.exo.cache.CacheManager;
 import com.zoe.player.player.exo.factory.CacheDataSourceFactory;
+import com.zoe.player.player.exo.factory.CustomDataSource;
 import com.zoe.player.player.exo.factory.CustomDataSourceFactory;
 import com.zoe.player.player.module.VideoFormat;
 
@@ -128,8 +129,13 @@ public class ExoPlayer implements Player {
             //测量播放过程中的带宽。 如果不需要，可以为null。
             DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
             if(contentType == C.TYPE_HLS) {
-                //针对HLS，自定义ts地址的加密以及解密
-                factory = new CustomDataSourceFactory(mContext, userAgent, bandwidthMeter);
+                if(configure.setProxy) {
+                    factory = new CustomDataSourceFactory(mContext,userAgent,bandwidthMeter,
+                            configure.proxyUrl, configure.proxyPort, configure.proxyType);
+                } else {
+                    //针对HLS，自定义ts地址的加密以及解密
+                    factory = new CustomDataSourceFactory(mContext, userAgent, bandwidthMeter);
+                }
             } else {
                 //非HLS，使用默认的Exo原生资源工厂
                 factory = new DefaultDataSourceFactory(mContext, userAgent, bandwidthMeter);

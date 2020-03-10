@@ -9,6 +9,8 @@ import com.zoe.android.exoplayer2.upstream.TransferListener;
 
 import androidx.annotation.Nullable;
 
+import java.net.Proxy;
+
 
 /**
  * author zoe
@@ -21,6 +23,25 @@ public class CustomDataSourceFactory
     private final Context context;
     private final @Nullable TransferListener listener;
     private final DataSource.Factory baseDataSourceFactory;
+    /**
+     * 是否设置代理
+     */
+    public boolean setProxy = false;
+
+    /**
+     * 代理地址
+     */
+    public String proxyUrl;
+
+    /**
+     * 代理端口
+     */
+    public int proxyPort;
+
+    /**
+     * 代理方式
+     */
+    public Proxy.Type proxyType = Proxy.Type.HTTP;
 
     /**
      * @param context A context.
@@ -38,6 +59,16 @@ public class CustomDataSourceFactory
     public CustomDataSourceFactory(
             Context context, String userAgent, @Nullable TransferListener listener) {
         this(context, listener, new DefaultHttpDataSourceFactory(userAgent, listener));
+    }
+
+    public CustomDataSourceFactory(
+            Context context, String userAgent, @Nullable TransferListener listener,
+            String proxyUrl, int proxyPort, Proxy.Type proxyType) {
+        this(context, listener, new DefaultHttpDataSourceFactory(userAgent, listener));
+        this.setProxy = true;
+        this.proxyUrl = proxyUrl;
+        this.proxyPort = proxyPort;
+        this.proxyType = proxyType;
     }
 
     /**
@@ -68,8 +99,14 @@ public class CustomDataSourceFactory
 
     @Override
     public CustomDataSource createDataSource() {
-        CustomDataSource dataSource =
-                new CustomDataSource(context, baseDataSourceFactory.createDataSource());
+        CustomDataSource dataSource;
+        if(setProxy) {
+            dataSource = new CustomDataSource(context, baseDataSourceFactory.createDataSource()
+                    , proxyUrl, proxyPort, proxyType);
+        } else {
+            dataSource =
+                    new CustomDataSource(context, baseDataSourceFactory.createDataSource());
+        }
         if (listener != null) {
             dataSource.addTransferListener(listener);
         }

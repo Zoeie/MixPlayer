@@ -431,12 +431,17 @@ public class DefaultHttpDataSource extends BaseDataSource implements HttpDataSou
     long position = dataSpec.position;
     long length = dataSpec.length;
     boolean allowGzip = dataSpec.isFlagSet(DataSpec.FLAG_ALLOW_GZIP);
-
+    boolean setProxy = dataSpec.setProxy;
+    String proxyUrl = dataSpec.proxyUrl;
+    int proxyPort = dataSpec.proxyPort;
+    Proxy.Type proxyType = dataSpec.proxyType;
+    Log.d(TAG, "setProxy:" + setProxy + ",proxyUrl:" + proxyUrl + ",proxyPort:" + proxyPort + ",type:" + proxyType);
     if (!allowCrossProtocolRedirects) {
       // HttpURLConnection disallows cross-protocol redirects, but otherwise performs redirection
       // automatically. This is the behavior we want, so use it.
       return makeConnection(
-          url, httpMethod, httpBody, position, length, allowGzip, true /* followRedirects */);
+          url, httpMethod, httpBody, position, length, allowGzip, true /* followRedirects */,
+              setProxy, proxyUrl, proxyPort, proxyType);
     }
 
     // We need to handle redirects ourselves to allow cross-protocol redirects.
@@ -444,7 +449,7 @@ public class DefaultHttpDataSource extends BaseDataSource implements HttpDataSou
     while (redirectCount++ <= MAX_REDIRECTS) {
       HttpURLConnection connection =
           makeConnection(
-              url, httpMethod, httpBody, position, length, allowGzip, false /* followRedirects */);
+              url, httpMethod, httpBody, position, length, allowGzip, false /* followRedirects */, setProxy, proxyUrl, proxyPort, proxyType);
       int responseCode = connection.getResponseCode();
       String location = connection.getHeaderField("Location");
       if ((httpMethod == DataSpec.HTTP_METHOD_GET || httpMethod == DataSpec.HTTP_METHOD_HEAD)
@@ -493,12 +498,21 @@ public class DefaultHttpDataSource extends BaseDataSource implements HttpDataSou
       long position,
       long length,
       boolean allowGzip,
-      boolean followRedirects)
+      boolean followRedirects,
+      boolean setProxy/*是够设置代理*/,
+      String proxyUrl/*代理的url地址*/,
+      int proxyPort/*代理端口*/,
+      Proxy.Type proxyType/*代理类型*/)
       throws IOException {
-    // 创建代理服务器
-    InetSocketAddress addr = new InetSocketAddress("127.0.0.1", 9050);
-    Proxy proxy = new Proxy(Proxy.Type.SOCKS, addr); // http 代理
-    HttpURLConnection connection = (HttpURLConnection) url.openConnection(proxy);
+    HttpURLConnection connection;
+    if (setProxy) {
+      // 创建代理服务器
+      InetSocketAddress addr = new InetSocketAddress(proxyUrl, proxyPort);
+      Proxy proxy = new Proxy(proxyType, addr); // http 代理
+      connection = (HttpURLConnection) url.openConnection(proxy);
+    } else {
+      connection = (HttpURLConnection) url.openConnection();
+    }
     connection.setConnectTimeout(connectTimeoutMillis);
     connection.setReadTimeout(readTimeoutMillis);
     if (defaultRequestProperties != null) {

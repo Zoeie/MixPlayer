@@ -1,5 +1,6 @@
 package com.zoe.player.player.base;
 
+import java.net.Proxy;
 import java.util.List;
 
 /**
@@ -16,6 +17,26 @@ public class SourceConfigure {
     private List<String> subtitleList;//字幕链接
 
     /**
+     * 是否设置代理
+     */
+    public boolean setProxy = false;
+
+    /**
+     * 代理地址
+     */
+    public String proxyUrl;
+
+    /**
+     * 代理端口
+     */
+    public int proxyPort;
+
+    /**
+     * 代理方式
+     */
+    public Proxy.Type proxyType = Proxy.Type.HTTP;
+
+    /**
      * 起始播放位置,ms值，只针对exoplayer起作用
      * 主要是为了处理exoplayer再prepare之后才调用seek会先显示资源的第一帧的问题
      */
@@ -23,6 +44,15 @@ public class SourceConfigure {
 
     public SourceConfigure(String playUrl) {
         this.playUrl = playUrl;
+        this.setProxy = false;
+    }
+
+    public SourceConfigure(String playUrl, String proxyUrl, int proxyPort, Proxy.Type proxyType) {
+        this.playUrl = playUrl;
+        this.proxyUrl = proxyUrl;
+        this.proxyPort = proxyPort;
+        this.proxyType = proxyType;
+        this.setProxy = true;
     }
 
     public SourceConfigure(String playUrl, List<String> subtitleList) {
@@ -58,5 +88,21 @@ public class SourceConfigure {
 
     public int getStartPosition() {
         return startPosition;
+    }
+
+    public boolean isSetProxy() {
+        return setProxy;
+    }
+
+    public String getProxyUrl() {
+        return proxyUrl;
+    }
+
+    public int getProxyPort() {
+        return proxyPort;
+    }
+
+    public Proxy.Type getProxyType() {
+        return proxyType;
     }
 }

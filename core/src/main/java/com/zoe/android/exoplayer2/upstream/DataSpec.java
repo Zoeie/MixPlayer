@@ -23,6 +23,7 @@ import com.zoe.android.exoplayer2.util.Assertions;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.net.Proxy;
 import java.util.Arrays;
 
 /**
@@ -76,6 +77,26 @@ public final class DataSpec {
    * The source from which data should be read.
    */
   public final Uri uri;
+
+  /**
+   * 是否设置代理
+   */
+  public boolean setProxy = false;
+
+  /**
+   * 代理地址
+   */
+  public String proxyUrl;
+
+  /**
+   * 代理端口
+   */
+  public int proxyPort;
+
+  /**
+   * 代理方式
+   */
+  public Proxy.Type proxyType = Proxy.Type.HTTP;
 
   /**
    * The HTTP method, which will be used by {@link HttpDataSource} when requesting this DataSpec.
