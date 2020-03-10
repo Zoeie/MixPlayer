@@ -47,8 +47,9 @@ public class SourceConfigure {
         this.setProxy = false;
     }
 
-    public SourceConfigure(String playUrl, String proxyUrl, int proxyPort, Proxy.Type proxyType) {
+    public SourceConfigure(String playUrl, List<String> subtitleList, String proxyUrl, int proxyPort, Proxy.Type proxyType) {
         this.playUrl = playUrl;
+        this.subtitleList = subtitleList;
         this.proxyUrl = proxyUrl;
         this.proxyPort = proxyPort;
         this.proxyType = proxyType;
