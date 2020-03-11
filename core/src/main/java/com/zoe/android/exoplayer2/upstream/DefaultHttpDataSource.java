@@ -276,7 +276,6 @@ public class DefaultHttpDataSource extends BaseDataSource implements HttpDataSou
     this.dataSpec = dataSpec;
     this.bytesRead = 0;
     this.bytesSkipped = 0;
-    Log.e("xxx","dataSpec:"+dataSpec);
     transferInitializing(dataSpec);
     try {
       connection = makeConnection(dataSpec);
