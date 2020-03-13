@@ -20,7 +20,7 @@ public class ExoPlayerFactory implements IPlayerFactory {
         if (configure instanceof ExoConfigure) {
             exoConfigure = (ExoConfigure) configure;
         } else {
-            exoConfigure = new ExoConfigure(configure.getSurfaceView(), configure.getBufferFactor());
+            exoConfigure = new ExoConfigure(configure.getSurfaceView(), configure.getBufferFactor(), configure.isEnableQuickSeek());
         }
         return new ExoPlayer(context, listener, exoConfigure);
     }

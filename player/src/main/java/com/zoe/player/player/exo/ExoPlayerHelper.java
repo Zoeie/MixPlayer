@@ -56,7 +56,7 @@ public class ExoPlayerHelper {
         LoadControl loadControl = new DefaultLoadControl.Builder().setBufferDurationsMs(
                 DefaultLoadControl.DEFAULT_MIN_BUFFER_MS * configure.getBufferFactor(),
                 DefaultLoadControl.DEFAULT_MAX_BUFFER_MS * configure.getBufferFactor(),
-                DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_MS,
+                configure.isEnableQuickSeek() ? 0 : DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_MS,
                 DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS)
                 .createDefaultLoadControl();
         //EXTENSION_RENDERER_MODE_ON：MediaCodecAudioRenderer不支持的格式，使用FfmpegAudioRenderer来进行播放

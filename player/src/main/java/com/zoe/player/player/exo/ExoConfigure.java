@@ -18,4 +18,8 @@ public class ExoConfigure extends PlayConfigure {
     public ExoConfigure(SurfaceView surfaceView, int bufferFactor) {
         super(surfaceView, bufferFactor);
     }
+
+    public ExoConfigure(SurfaceView surfaceView, int bufferFactor, boolean enableQuickSeek) {
+        super(surfaceView, bufferFactor, enableQuickSeek);
+    }
 }

@@ -217,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onVideoSizeChanged(int width, int height) {
 
             }
-        }, PlayConstant.EXO_PLAYER, new PlayConfigure(surfaceView));
+        }, PlayConstant.EXO_PLAYER, new PlayConfigure(surfaceView,1,false));
        /* List<String> subtitleList = new ArrayList<>();
         subtitleList.add("http://img.lemmovie.com/sub/Game.of.Thrones.S08E01_cn.srt");
         subtitleList.add("http://img.lemmovie.com/sub/quanyou8_1_track3_en.srt");
