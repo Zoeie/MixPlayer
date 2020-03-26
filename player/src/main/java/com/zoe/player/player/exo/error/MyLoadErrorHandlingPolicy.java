@@ -4,7 +4,6 @@ import com.zoe.android.exoplayer2.C;
 import com.zoe.android.exoplayer2.ParserException;
 import com.zoe.android.exoplayer2.upstream.HttpDataSource;
 import com.zoe.android.exoplayer2.upstream.LoadErrorHandlingPolicy;
-import com.zoe.android.exoplayer2.util.Log;
 
 import java.io.IOException;
 
@@ -16,7 +15,7 @@ import java.io.IOException;
 public class MyLoadErrorHandlingPolicy implements LoadErrorHandlingPolicy {
 
     /** The default minimum number of times to retry loading data prior to propagating the error. */
-    public static final int DEFAULT_MIN_LOADABLE_RETRY_COUNT = 10;
+    public static final int DEFAULT_MIN_LOADABLE_RETRY_COUNT = 5;
     /**
      * The default minimum number of times to retry loading prior to failing for progressive live
      * streams.

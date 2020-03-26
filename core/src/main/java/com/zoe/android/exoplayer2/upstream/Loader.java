@@ -20,18 +20,20 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.SystemClock;
+
 import androidx.annotation.IntDef;
 import androidx.annotation.Nullable;
+
 import com.zoe.android.exoplayer2.C;
 import com.zoe.android.exoplayer2.util.Assertions;
 import com.zoe.android.exoplayer2.util.Log;
 import com.zoe.android.exoplayer2.util.TraceUtil;
 import com.zoe.android.exoplayer2.util.Util;
+
 import java.io.IOException;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.net.ProtocolException;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -294,6 +296,9 @@ public final class Loader implements LoaderErrorThrower {
     }
   }
 
+  private int cancelCount = 0;//取消次数(计算的是在错误异常出现的取消次数)
+  private static final int CANCEL_COUNT_LIMIT = 3;//异常跳过ts的最大次数
+
   // Internal classes.
 
   @SuppressLint("HandlerLeak")
@@ -331,9 +336,11 @@ public final class Loader implements LoaderErrorThrower {
 
     public void maybeThrowError(int minRetryCount) throws IOException {
       if (currentError != null && errorCount > minRetryCount) {
-        if(currentError instanceof ProtocolException) {
+        Log.e(TAG, "minRetryCount:" + minRetryCount + ",cancelCount:" + cancelCount);
+        if (cancelCount < CANCEL_COUNT_LIMIT) {
           /***********当遇到协议异常时，修改为取消当前ts片的下载(即跳过该片)***********/
           cancel(false);
+          cancelCount++;
           return;
           /***********当遇到协议异常时，修改为取消当前ts片的下载(即跳过该片)***********/
         }
