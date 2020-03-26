@@ -38,6 +38,7 @@ import com.zoe.player.player.base.Player;
 import com.zoe.player.player.base.SourceConfigure;
 import com.zoe.player.player.base.SubtitleData;
 import com.zoe.player.player.exo.cache.CacheManager;
+import com.zoe.player.player.exo.error.MyLoadErrorHandlingPolicy;
 import com.zoe.player.player.exo.factory.CacheDataSourceFactory;
 import com.zoe.player.player.exo.factory.CustomDataSource;
 import com.zoe.player.player.exo.factory.CustomDataSourceFactory;
@@ -143,7 +144,8 @@ public class ExoPlayer implements Player {
         }
         switch (contentType) {
             case C.TYPE_HLS:
-                mediaSource = new HlsMediaSource.Factory(factory).createMediaSource(Uri.parse(playUrl));
+                mediaSource = new HlsMediaSource.Factory(factory).setLoadErrorHandlingPolicy(new MyLoadErrorHandlingPolicy())
+                        .createMediaSource(Uri.parse(playUrl));
                 break;
             case C.TYPE_OTHER:
             default:
