@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //    private static final String VIDEO_URL = "http://10.20.63.222:1977/hls/6_World_Match_RU.m3u8";
 //    private static final String VIDEO_URL = "http://ts.lemmovie.com/ab2ffad6-acc9-4595-acf3-467626c22fb5/master.m3u8";//AOD时移
 //    private static final String VIDEO_URL = "http://ts.lemmovie.com/68cd46a7-3bf1-4406-add7-5474a1d49948/master.m3u8";
-    private static final String VIDEO_URL = "http://10.20.63.116:81/lvod/2020/03/00b7272f-ace7-9726-4049-67895d3def04/master.m3u8";//普通点播
+    private static final String VIDEO_URL = "http://vod.lemmovie.com/vod/3949cf47-8c56-cabb-f631-63bc66a45a19.m3u8";//普通点播
     private MySeekBar seekBar;
     private TextView            tvPassTime;
     private TextView            tvBufferTime;
@@ -223,7 +223,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         subtitleList.add("http://img.lemmovie.com/sub/quanyou8_1_track3_en.srt");
         SourceConfigure configure = new SourceConfigure(VIDEO_URL,subtitleList);*/
         SourceConfigure configure = new SourceConfigure(VIDEO_URL/*,null,"127.0.0.1",9050,Proxy.Type.SOCKS*/);
-
+        configure.setStartPosition(100 * 1000);
         String path = Environment.getExternalStorageDirectory() + File.separator + "3.ts";
 //        SourceConfigure configure = new SourceConfigure(path);
         iPlayer.play(configure);

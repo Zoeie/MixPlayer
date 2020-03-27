@@ -336,13 +336,16 @@ public final class Loader implements LoaderErrorThrower {
 
     public void maybeThrowError(int minRetryCount) throws IOException {
       if (currentError != null && errorCount > minRetryCount) {
+        boolean shouldBlockException = (currentError instanceof UnexpectedLoaderException);
         Log.e(TAG, "minRetryCount:" + minRetryCount + ",cancelCount:" + cancelCount);
-        if (cancelCount < CANCEL_COUNT_LIMIT) {
-          /***********当遇到协议异常时，修改为取消当前ts片的下载(即跳过该片)***********/
-          cancel(false);
-          cancelCount++;
-          return;
-          /***********当遇到协议异常时，修改为取消当前ts片的下载(即跳过该片)***********/
+        if (!shouldBlockException) {
+          if (cancelCount < CANCEL_COUNT_LIMIT) {
+            /***********当遇到协议异常时，修改为取消当前ts片的下载(即跳过该片)***********/
+            cancel(false);
+            cancelCount++;
+            return;
+            /***********当遇到协议异常时，修改为取消当前ts片的下载(即跳过该片)***********/
+          }
         }
         throw currentError;
       }
