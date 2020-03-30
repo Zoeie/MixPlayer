@@ -315,7 +315,8 @@ public interface HttpDataSource extends DataSource {
         @Nullable String responseMessage,
         Map<String, List<String>> headerFields,
         DataSpec dataSpec) {
-      super("Response code: " + responseCode, dataSpec, TYPE_OPEN);
+      super("Response code: " + responseCode + ",uri:" + ((dataSpec == null || dataSpec.uri == null) ? "data spec is null"
+              : dataSpec.uri.toString()), dataSpec, TYPE_OPEN);
       this.responseCode = responseCode;
       this.responseMessage = responseMessage;
       this.headerFields = headerFields;
