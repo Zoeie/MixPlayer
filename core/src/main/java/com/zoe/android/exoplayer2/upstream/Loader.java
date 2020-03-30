@@ -298,6 +298,7 @@ public final class Loader implements LoaderErrorThrower {
 
   private int cancelCount = 0;//取消次数(计算的是在错误异常出现的取消次数)
   private static final int CANCEL_COUNT_LIMIT = 3;//异常跳过ts的最大次数
+  private int loadTsCount = 0;
 
   // Internal classes.
 
@@ -337,8 +338,9 @@ public final class Loader implements LoaderErrorThrower {
     public void maybeThrowError(int minRetryCount) throws IOException {
       if (currentError != null && errorCount > minRetryCount) {
         boolean shouldBlockException = (currentError instanceof UnexpectedLoaderException);
-        Log.e(TAG, "minRetryCount:" + minRetryCount + ",cancelCount:" + cancelCount);
-        if (!shouldBlockException) {
+        Log.e(TAG, "minRetryCount:" + minRetryCount + ",cancelCount:" + cancelCount + ",loadTsCount:"+loadTsCount);
+        //至少加载过一片ts
+        if (!shouldBlockException && loadTsCount > 0) {
           if (cancelCount < CANCEL_COUNT_LIMIT) {
             /***********当遇到协议异常时，修改为取消当前ts片的下载(即跳过该片)***********/
             cancel(false);
@@ -465,6 +467,11 @@ public final class Loader implements LoaderErrorThrower {
         case MSG_END_OF_SOURCE:
           try {
             callback.onLoadCompleted(loadable, nowMs, durationMs);
+            if(loadable instanceof ParsingLoadable) {
+              loadTsCount = 0;
+            } else {
+              loadTsCount++;
+            }
           } catch (RuntimeException e) {
             // This should never happen, but handle it anyway.
             Log.e(TAG, "Unexpected exception handling load completed", e);
