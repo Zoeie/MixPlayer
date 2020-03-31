@@ -15,7 +15,7 @@ import java.io.IOException;
 public class MyLoadErrorHandlingPolicy implements LoadErrorHandlingPolicy {
 
     /** The default minimum number of times to retry loading data prior to propagating the error. */
-    public static final int DEFAULT_MIN_LOADABLE_RETRY_COUNT = 5;
+    public static final int DEFAULT_MIN_LOADABLE_RETRY_COUNT = 8;
     /**
      * The default minimum number of times to retry loading prior to failing for progressive live
      * streams.
@@ -68,14 +68,14 @@ public class MyLoadErrorHandlingPolicy implements LoadErrorHandlingPolicy {
 
     /**
      * Retries for any exception that is not a subclass of {@link ParserException}. The retry delay is
-     * calculated as {@code Math.min((errorCount - 1) * 1000, 5000)}.
+     * calculated as {@code Math.min((errorCount - 1) * 1000, 3000)}.
      */
     @Override
     public long getRetryDelayMsFor(
             int dataType, long loadDurationMs, IOException exception, int errorCount) {
         return exception instanceof ParserException
                 ? C.TIME_UNSET
-                : Math.min((errorCount - 1) * 1000, 5000);
+                : errorCount > 3 ? 1000 : Math.min((errorCount - 1) * 1000, 3000);
     }
 
     /**
