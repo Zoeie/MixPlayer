@@ -345,11 +345,13 @@ public final class Loader implements LoaderErrorThrower {
         Date d = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         String currTime = sdf.format(d);
+        message.append("\n").append("*************************************").append("\n");
         message.append("currTime:").append(currTime).append(",");
         message.append("errorCount:").append(errorCount).append(",");
         message.append("cancelCount:").append(cancelCount).append(",");
         message.append("loadTsCount:").append(loadTsCount).append(",");
         message.append("shouldBlockException:").append(shouldBlockException);
+        message.append("\n").append("*************************************").append("\n");
         Log.e(TAG, "minRetryCount:" + minRetryCount + ",cancelCount:" + cancelCount + ",loadTsCount:"+loadTsCount);
         //至少加载过一片ts
         if (!shouldBlockException && loadTsCount > 0) {
@@ -494,6 +496,12 @@ public final class Loader implements LoaderErrorThrower {
         case MSG_IO_EXCEPTION:
           currentError = (IOException) msg.obj;
           errorCount++;
+          Date d = new Date();
+          SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+          String currTime = sdf.format(d);
+          message.append("errorCount:").append(errorCount).append(",");
+          message.append("currTime:").append(currTime);
+          message.append("error:").append(currentError.getMessage()).append("\n");
           LoadErrorAction action =
               callback.onLoadError(loadable, nowMs, durationMs, currentError, errorCount);
           if (action.type == ACTION_TYPE_DONT_RETRY_FATAL) {
