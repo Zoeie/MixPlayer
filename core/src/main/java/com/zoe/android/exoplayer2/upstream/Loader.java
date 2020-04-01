@@ -34,6 +34,9 @@ import java.io.IOException;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -299,6 +302,7 @@ public final class Loader implements LoaderErrorThrower {
   private int cancelCount = 0;//取消次数(计算的是在错误异常出现的取消次数)
   private static final int CANCEL_COUNT_LIMIT = 3;//异常跳过ts的最大次数
   private int loadTsCount = 0;
+  private StringBuilder message = new StringBuilder();
 
   // Internal classes.
 
@@ -338,6 +342,14 @@ public final class Loader implements LoaderErrorThrower {
     public void maybeThrowError(int minRetryCount) throws IOException {
       if (currentError != null && errorCount > minRetryCount) {
         boolean shouldBlockException = (currentError instanceof UnexpectedLoaderException);
+        Date d = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        String currTime = sdf.format(d);
+        message.append("currTime:").append(currTime).append(",");
+        message.append("errorCount:").append(errorCount).append(",");
+        message.append("cancelCount:").append(cancelCount).append(",");
+        message.append("loadTsCount:").append(loadTsCount).append(",");
+        message.append("shouldBlockException:").append(shouldBlockException);
         Log.e(TAG, "minRetryCount:" + minRetryCount + ",cancelCount:" + cancelCount + ",loadTsCount:"+loadTsCount);
         //至少加载过一片ts
         if (!shouldBlockException && loadTsCount > 0) {
@@ -349,7 +361,7 @@ public final class Loader implements LoaderErrorThrower {
             /***********当遇到协议异常时，修改为取消当前ts片的下载(即跳过该片)***********/
           }
         }
-        throw currentError;
+        throw new IOException(message.toString(), currentError);
       }
     }
 
@@ -469,6 +481,7 @@ public final class Loader implements LoaderErrorThrower {
             callback.onLoadCompleted(loadable, nowMs, durationMs);
             if(loadable instanceof ParsingLoadable) {
               loadTsCount = 0;
+              message.setLength(0);
             } else {
               loadTsCount++;
             }
