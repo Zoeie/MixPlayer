@@ -263,11 +263,16 @@ public class CustomDataSource implements DataSource {
                             android.util.Log.i(TAG, "open: absolutePath");
                         }else {
                             String authority = dataSpec.uri.getAuthority();
-                            String subPath = authority + path + result;
-                            android.util.Log.d(TAG, "open():---authority:" + authority + ",path:" + path + ",relativePath:" + result);
+                            String subPath;
+                            if (result.startsWith("/")) {
+                                subPath = authority + result;//绝对路径
+                            } else {
+                                subPath = authority + path + result;//相对路径
+                            }
+//                            android.util.Log.d(TAG, "open():---authority:" + authority + ",path:" + path + ",relativePath:" + result);
                             String newPath = dataSpec.uri.getScheme() + "://" + subPath;
                             myDataSpec = new DataSpec(Uri.parse(newPath));
-                            android.util.Log.i(TAG, "open: encrypt data--newPath:" + newPath);
+                            android.util.Log.d(TAG, "open: encrypt data--newPath:" + newPath);
                         }
                     }
                 } catch (NumberFormatException e) {
