@@ -1,7 +1,9 @@
 package com.zoe.playdemo;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.SurfaceView;
 import android.view.View;
@@ -25,6 +27,8 @@ import com.zoe.player.player.base.SourceConfigure;
 import com.zoe.player.player.base.SubtitleData;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.Proxy;
 import java.util.Formatter;
 import java.util.Locale;
@@ -58,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //    private static final String VIDEO_URL = "http://10.20.63.222:1977/hls/6_World_Match_RU.m3u8";
 //    private static final String VIDEO_URL = "http://ts.lemmovie.com/ab2ffad6-acc9-4595-acf3-467626c22fb5/master.m3u8";//AOD时移
 //    private static final String VIDEO_URL = "http://ts.lemmovie.com/68cd46a7-3bf1-4406-add7-5474a1d49948/master.m3u8";
-    private static final String VIDEO_URL = "http://vod.lemmovie.com/vod/3949cf47-8c56-cabb-f631-63bc66a45a19.m3u8";//普通点播
+    private static final String VIDEO_URL = "https://meiju9.qhqsnedu.com/20190829/EACkCclg/index.m3u8";//普通点播
     private MySeekBar seekBar;
     private TextView            tvPassTime;
     private TextView            tvBufferTime;

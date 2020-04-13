@@ -433,7 +433,12 @@ public interface MediaSourceEventListener {
         final MediaSourceEventListener listener = listenerAndHandler.listener;
         postOrRun(
             listenerAndHandler.handler,
-            () -> listener.onLoadStarted(windowIndex, mediaPeriodId, loadEventInfo, mediaLoadData));
+                new Runnable() {
+                  @Override
+                  public void run() {
+                    listener.onLoadStarted(windowIndex, mediaPeriodId, loadEventInfo, mediaLoadData);
+                  }
+                });
       }
     }
 
