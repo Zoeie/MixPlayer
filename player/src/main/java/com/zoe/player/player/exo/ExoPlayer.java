@@ -477,7 +477,7 @@ public class ExoPlayer implements Player {
         handler.removeCallbacks(progressAction);
         // Schedule an update if necessary.
         int playbackState = exoPlayer == null ? com.zoe.android.exoplayer2.Player.STATE_IDLE : exoPlayer.getPlaybackState();
-        if (playbackState != com.zoe.android.exoplayer2.Player.STATE_IDLE && playbackState != com.zoe.android.exoplayer2.Player.STATE_ENDED) {
+        if (playbackState != com.zoe.android.exoplayer2.Player.STATE_IDLE) {
             long delayMs;
             if (exoPlayer.getPlayWhenReady() && playbackState == com.zoe.android.exoplayer2.Player.STATE_READY) {
                 delayMs = PlayConstant.PROGRESS_INTERVAL - (position % PlayConstant.PROGRESS_INTERVAL);
