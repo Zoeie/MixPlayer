@@ -4,6 +4,8 @@ import android.content.Context;
 import android.net.Uri;
 import android.text.TextUtils;
 
+import androidx.annotation.Nullable;
+
 import com.zoe.android.exoplayer2.upstream.AssetDataSource;
 import com.zoe.android.exoplayer2.upstream.ContentDataSource;
 import com.zoe.android.exoplayer2.upstream.DataSchemeDataSource;
@@ -16,6 +18,7 @@ import com.zoe.android.exoplayer2.upstream.TransferListener;
 import com.zoe.android.exoplayer2.util.Assertions;
 import com.zoe.android.exoplayer2.util.Log;
 import com.zoe.android.exoplayer2.util.Util;
+import com.zoe.player.BuildConfig;
 import com.zoe.player.player.util.M3u8ParseUtil;
 
 import java.io.IOException;
@@ -24,8 +27,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
-import androidx.annotation.Nullable;
 
 
 /**
@@ -272,14 +273,18 @@ public class CustomDataSource implements DataSource {
 //                            android.util.Log.d(TAG, "open():---authority:" + authority + ",path:" + path + ",relativePath:" + result);
                             String newPath = dataSpec.uri.getScheme() + "://" + subPath;
                             myDataSpec = new DataSpec(Uri.parse(newPath));
-                            android.util.Log.d(TAG, "open: encrypt data--newPath:" + newPath);
+                            if (BuildConfig.DEBUG) {
+                                android.util.Log.d(TAG, "open: encrypt data--newPath:" + newPath);
+                            }
                         }
                     }
                 } catch (NumberFormatException e) {
-                    android.util.Log.e(TAG, "Number Format Exception" + ts);
+                    android.util.Log.e(TAG, "Number Format Exception:" + ts);
                 }
             } else {//非加密数据，ts流的链接为相对路径时播放器会自动拼接好回调到这边
-                android.util.Log.d(TAG, "open: general data：" + ts);
+                if (BuildConfig.DEBUG) {
+                    android.util.Log.d(TAG, "open: general data：" + ts);
+                }
             }
         }
 

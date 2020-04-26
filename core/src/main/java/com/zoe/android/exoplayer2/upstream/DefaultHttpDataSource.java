@@ -19,6 +19,7 @@ import android.net.Uri;
 import androidx.annotation.Nullable;
 import android.text.TextUtils;
 import com.zoe.android.exoplayer2.C;
+import com.zoe.android.exoplayer2.core.BuildConfig;
 import com.zoe.android.exoplayer2.upstream.DataSpec.HttpMethod;
 import com.zoe.android.exoplayer2.util.Assertions;
 import com.zoe.android.exoplayer2.util.Log;
@@ -435,7 +436,9 @@ public class DefaultHttpDataSource extends BaseDataSource implements HttpDataSou
     String proxyUrl = dataSpec.proxyUrl;
     int proxyPort = dataSpec.proxyPort;
     Proxy.Type proxyType = dataSpec.proxyType;
-    Log.d(TAG, "setProxy:" + setProxy + ",proxyUrl:" + proxyUrl + ",proxyPort:" + proxyPort + ",type:" + proxyType);
+    if(BuildConfig.DEBUG) {
+      Log.d(TAG, "setProxy:" + setProxy + ",proxyUrl:" + proxyUrl + ",proxyPort:" + proxyPort + ",type:" + proxyType);
+    }
     if (!allowCrossProtocolRedirects) {
       // HttpURLConnection disallows cross-protocol redirects, but otherwise performs redirection
       // automatically. This is the behavior we want, so use it.
