@@ -24,7 +24,6 @@ import com.zoe.android.exoplayer2.ParserException;
 import com.zoe.android.exoplayer2.drm.DrmInitData;
 import com.zoe.android.exoplayer2.drm.DrmInitData.SchemeData;
 import com.zoe.android.exoplayer2.extractor.mp4.PsshAtomUtil;
-import com.zoe.android.exoplayer2.parseutil.M3u8ParseUtil;
 import com.zoe.android.exoplayer2.source.UnrecognizedInputFormatException;
 import com.zoe.android.exoplayer2.upstream.ParsingLoadable;
 import com.zoe.android.exoplayer2.util.MimeTypes;
@@ -617,10 +616,6 @@ public final class HlsPlaylistParser implements ParsingLoadable.Parser<HlsPlayli
             }
             playlistProtectionSchemes = new DrmInitData(encryptionScheme, playlistSchemeDatas);
           }
-        }
-        //当偏移量大于64位时，判定其为加密的偏移量，需要进行解密
-        if (segmentEncryptionIV != null && segmentEncryptionIV.length() >= 64) {
-          segmentEncryptionIV = M3u8ParseUtil.parse(segmentEncryptionIV);
         }
         segments.add(
             new HlsMediaPlaylist.Segment(

@@ -15,11 +15,14 @@
  */
 package com.zoe.android.exoplayer2.source.chunk;
 
+import android.text.TextUtils;
+
 import com.zoe.android.exoplayer2.C;
 import com.zoe.android.exoplayer2.Format;
 import com.zoe.android.exoplayer2.parseutil.M3u8ParseUtil;
 import com.zoe.android.exoplayer2.upstream.DataSource;
 import com.zoe.android.exoplayer2.upstream.DataSpec;
+import com.zoe.android.exoplayer2.util.Log;
 import com.zoe.android.exoplayer2.util.Util;
 
 import java.io.IOException;
@@ -75,15 +78,22 @@ public abstract class DataChunk extends Chunk {
 
   @Override
   public final void load() throws IOException, InterruptedException {
-      try {
-        if (dataSpec.uri.toString().contains(ENC_SUFFIX)) {
-          String parse = M3u8ParseUtil.parse(HLS_ENCRYPTION_KEY);
+    try {
+      String keyUri = dataSpec.uri.toString();
+      if (!TextUtils.isEmpty(keyUri)) {
+        int beginIndex = (keyUri.lastIndexOf("/") + 1);
+        beginIndex = beginIndex > keyUri.length() ? keyUri.length() : beginIndex;
+        String keyStr = keyUri.substring(beginIndex);
+        //如果截取到key长度大于64，则判断为需要解密的key(防止对第三方key进行解密的误处理)
+        if (!TextUtils.isEmpty(keyStr) && keyStr.length() > 64) {
+          String parse = M3u8ParseUtil.parse(keyStr);
           if (parse != null) {
             data = parse.getBytes();
             consume(data, data.length);
             return;
           }
         }
+      }
       dataSource.open(dataSpec);
       int limit = 0;
       int bytesRead = 0;

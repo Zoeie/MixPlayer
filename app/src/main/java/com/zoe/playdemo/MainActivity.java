@@ -1,9 +1,7 @@
 package com.zoe.playdemo;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.SurfaceView;
 import android.view.View;
@@ -16,6 +14,8 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.zoe.playdemo.util.LogUtil;
 import com.zoe.playdemo.view.MySeekBar;
 import com.zoe.player.player.PlayConstant;
@@ -27,13 +27,8 @@ import com.zoe.player.player.base.SourceConfigure;
 import com.zoe.player.player.base.SubtitleData;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.Proxy;
 import java.util.Formatter;
 import java.util.Locale;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -42,27 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private boolean flag;
     private RelativeLayout rlMain;
     private float speed = 1;
-
-//        private static final String VIDEO_URL = "http://yfvod.lemmovie.com/vod/48F0ADF7096844F697FB0B5877029AA3/master.m3u8?pt=0";
-//        private static final String VIDEO_URL = "http://yflive2.lemmovie.com/cdn/iptv-line.com:6969/live/my.longtv1-restream/izEUgF7l/2457.m3u8";
-//        private static final String VIDEO_URL = "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8";
-//        private static final String VIDEO_URL = Environment.getExternalStorageDirectory()+ File.separator+"testData"+File.separator+"testdata.m3u8";;
-//    private static final String VIDEO_URL = "http://10.11.89.80:8080/ts/media-playlist-test.m3u8";;
-//        private static final String VIDEO_URL = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
-//    private static final String VIDEO_URL = "https://cdn.letv-cdn.com/2018/12/20/n4s9XBjHUVWz7Bsh/playlist.m3u8";//ijk测试https
-//    private static final String VIDEO_URL = "http://gz.long.tv:1977/live2/10.20.63.67:1977/live/afc.m3u8";//加密资源,ts解密后为相对路径
-//    private static final String VIDEO_URL = "https://zy.512wx.com/20171130/EI2p4dYT/index.m3u8";
-//    private static final String VIDEO_URL = "http://yfvod.lemmovie.com/vod/437332CF8EA1444B8A06FB923CEC9FDC/master.m3u8?pt=0";
-//    private static final String VIDEO_URL = "https://www2.yuboyun.com/hls/2018/07/29/SqB3V9P4/playlist.m3u8";
-//    private static final String VIDEO_URL = "http://cdn.lemmovie.com/live/1e54d0e5-7b1a-42b0-a4f0-26610627ee4c.m3u8";
-//    private static final String VIDEO_URL = "http://10.11.89.80:8080/timeshift/a678c957-ef44-4c5d-a2d9-99003bab05d5/master.m3u8";//时移;
-//    private static final String VIDEO_URL = "http://ts.lemmovie.com/a678c957-ef44-4c5d-a2d9-99003bab05d5/master.m3u8";//J2时移
-//    private static final String VIDEO_URL = "http://vod.lemmovie.com/vod/0e549fe7-2acf-64b1-dcec-6353d87f17de0.m3u8";//时移 马来西亚 NTV7
-//    private static final String VIDEO_URL = "http://10.20.63.222:1977/hls/3_VN_FOX_MOVIES_HD.m3u8";//exo显示第一帧卡住
-//    private static final String VIDEO_URL = "http://10.20.63.222:1977/hls/6_World_Match_RU.m3u8";
-//    private static final String VIDEO_URL = "http://ts.lemmovie.com/ab2ffad6-acc9-4595-acf3-467626c22fb5/master.m3u8";//AOD时移
-//    private static final String VIDEO_URL = "http://ts.lemmovie.com/68cd46a7-3bf1-4406-add7-5474a1d49948/master.m3u8";
-    private static final String VIDEO_URL = "https://meiju9.qhqsnedu.com/20190829/EACkCclg/index.m3u8";//普通点播
+    private static final String VIDEO_URL = "http://vod.lemmovie.com/vod/05ac75a7-9709-7567-380d-d559f5cea935.m3u8";//普通点播
     private MySeekBar seekBar;
     private TextView            tvPassTime;
     private TextView            tvBufferTime;
