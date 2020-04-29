@@ -276,7 +276,6 @@ public class ExoPlayer implements Player {
                         executeProgress();
                         if (mPlayListener != null) {
                             mPlayListener.onPlayPrepared();
-                            handler.postDelayed(checkAc3Runnable, 5000);
                         }
                         isPrepared = true;
                     }
@@ -373,7 +372,6 @@ public class ExoPlayer implements Player {
             exoPlayerHelper = null;
         }
         handler.removeCallbacks(progressAction);
-        handler.removeCallbacks(checkAc3Runnable);
     }
 
     @Override
@@ -498,16 +496,6 @@ public class ExoPlayer implements Player {
         @Override
         public void run() {
             executeProgress();
-        }
-    };
-
-    //ac3资源在盒子不支持，所以需要校验一下
-    private final Runnable checkAc3Runnable = new Runnable() {
-        @Override
-        public void run() {
-            if(exoPlayerHelper != null) {
-                exoPlayerHelper.audioTrackEnable(true);
-            }
         }
     };
 
