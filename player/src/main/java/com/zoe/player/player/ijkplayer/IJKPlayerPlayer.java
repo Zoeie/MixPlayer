@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import androidx.annotation.Nullable;
+
 import com.zoe.player.player.PlayConstant;
 import com.zoe.player.player.base.PlayListener;
 import com.zoe.player.player.base.Player;
@@ -21,7 +23,6 @@ import com.zoe.player.player.subtitle.model.Subtitle;
 import java.io.IOException;
 import java.util.List;
 
-import androidx.annotation.Nullable;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 import tv.danmaku.ijk.media.player.misc.IMediaFormat;
@@ -412,7 +413,11 @@ public class IJKPlayerPlayer implements Player, SurfaceHolder.Callback, Subtitle
 
     @Override
     public void switchSubtitle(int index) {
-
+        if (mSubtitleEngine != null) {
+            if (mSourceConfigure != null && mSourceConfigure.getSubtitleList() != null && index < mSourceConfigure.getSubtitleList().size()) {
+                mSubtitleEngine.setSubtitlePath(mSourceConfigure.getSubtitleList().get(index));
+            }
+        }
     }
 
     @Override

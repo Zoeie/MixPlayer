@@ -27,7 +27,9 @@ import com.zoe.player.player.base.SourceConfigure;
 import com.zoe.player.player.base.SubtitleData;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Formatter;
+import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -37,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private boolean flag;
     private RelativeLayout rlMain;
     private float speed = 1;
-    private static final String VIDEO_URL = "http://vod.lemmovie.com/vod/05ac75a7-9709-7567-380d-d559f5cea935.m3u8";//普通点播
+    private static final String VIDEO_URL = "/sdcard/惊天营救.Extraction.2020.HD720P.X264.AAC.English.CHS-ENG.Mp4Ba.mp4";//普通点播
     private MySeekBar seekBar;
     private TextView            tvPassTime;
     private TextView            tvBufferTime;
@@ -196,15 +198,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onVideoSizeChanged(int width, int height) {
 
             }
-        }, PlayConstant.EXO_PLAYER, new PlayConfigure(surfaceView,1,true));
-       /* List<String> subtitleList = new ArrayList<>();
-        subtitleList.add("http://img.lemmovie.com/sub/Game.of.Thrones.S08E01_cn.srt");
-        subtitleList.add("http://img.lemmovie.com/sub/quanyou8_1_track3_en.srt");
-        SourceConfigure configure = new SourceConfigure(VIDEO_URL,subtitleList);*/
-        SourceConfigure configure = new SourceConfigure(VIDEO_URL/*,null,"127.0.0.1",9050,Proxy.Type.SOCKS*/);
+        }, PlayConstant.IJK_PLAYER, new PlayConfigure(surfaceView, 1, true));
+        List<String> subtitleList = new ArrayList<>();
+        subtitleList.add("http://img.lemmovie.com/sub/惊天营救_ft.srt");
+        subtitleList.add("http://img.lemmovie.com/sub/惊天营救_rw.srt");
+        SourceConfigure configure = new SourceConfigure(VIDEO_URL, subtitleList);
+        //SourceConfigure configure = new SourceConfigure(VIDEO_URL/*,null,"127.0.0.1",9050,Proxy.Type.SOCKS*/);
         //configure.setStartPosition(100 * 1000);
-        String path = Environment.getExternalStorageDirectory() + File.separator + "3.ts";
-//        SourceConfigure configure = new SourceConfigure(path);
         iPlayer.play(configure);
     }
 
@@ -240,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             case R.id.btn_subtitle_switch:
-//                iPlayer.switchSubtitle(1);
+                iPlayer.switchSubtitle(1);
                 break;
             case R.id.btn_speed_switch:
                 speed += 0.5f;
