@@ -40,7 +40,6 @@ import com.zoe.player.player.base.SubtitleData;
 import com.zoe.player.player.exo.cache.CacheManager;
 import com.zoe.player.player.exo.error.MyLoadErrorHandlingPolicy;
 import com.zoe.player.player.exo.factory.CacheDataSourceFactory;
-import com.zoe.player.player.exo.factory.CustomDataSource;
 import com.zoe.player.player.exo.factory.CustomDataSourceFactory;
 import com.zoe.player.player.module.VideoFormat;
 
@@ -202,10 +201,15 @@ public class ExoPlayer implements Player {
 
     //通过链接判断是什么语言的字幕
     private String getSubtitleLanguage(String subtitleUrl) {
-        if(TextUtils.isEmpty(subtitleUrl)) return null;
-        int dot = subtitleUrl.lastIndexOf('.');
-        String temp = subtitleUrl.substring(0, dot);
-        return temp.substring(temp.length() - 2);//截取拓展名前面最后的两个字符，作为字幕的语言
+        if (TextUtils.isEmpty(subtitleUrl)) return null;
+        int crossIndex = subtitleUrl.lastIndexOf("_");
+        int dotIndex = subtitleUrl.lastIndexOf('.');
+        int startIndex = crossIndex + 1;
+        int endIndex = dotIndex;
+        if (startIndex > endIndex) {
+            endIndex = startIndex;
+        }
+        return subtitleUrl.substring(startIndex, endIndex);//截取拓展名前面最后的两个字符，作为字幕的语言
     }
 
     private TextOutput mOutput = new TextOutput() {
