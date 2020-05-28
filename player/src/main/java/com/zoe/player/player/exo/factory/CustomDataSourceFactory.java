@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.zoe.android.exoplayer2.upstream.DataSource;
 import com.zoe.android.exoplayer2.upstream.DefaultDataSource;
+import com.zoe.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.zoe.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.zoe.android.exoplayer2.upstream.TransferListener;
 
@@ -58,7 +59,9 @@ public class CustomDataSourceFactory
      */
     public CustomDataSourceFactory(
             Context context, String userAgent, @Nullable TransferListener listener) {
-        this(context, listener, new DefaultHttpDataSourceFactory(userAgent, listener));
+        this(context, listener, new DefaultHttpDataSourceFactory(userAgent, listener,
+                //用于支持重定向
+                DefaultHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS, DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS, true));
     }
 
     public CustomDataSourceFactory(
