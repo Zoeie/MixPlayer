@@ -16,8 +16,10 @@
 package com.zoe.android.exoplayer2.upstream;
 
 import android.net.Uri;
-import androidx.annotation.Nullable;
 import android.text.TextUtils;
+
+import androidx.annotation.Nullable;
+
 import com.zoe.android.exoplayer2.C;
 import com.zoe.android.exoplayer2.core.BuildConfig;
 import com.zoe.android.exoplayer2.upstream.DataSpec.HttpMethod;
@@ -25,6 +27,7 @@ import com.zoe.android.exoplayer2.util.Assertions;
 import com.zoe.android.exoplayer2.util.Log;
 import com.zoe.android.exoplayer2.util.Predicate;
 import com.zoe.android.exoplayer2.util.Util;
+
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -685,6 +688,11 @@ public class DefaultHttpDataSource extends BaseDataSource implements HttpDataSou
         return C.RESULT_END_OF_INPUT;
       }
       readLength = (int) Math.min(readLength, bytesRemaining);
+    }
+
+    //用于判断数据为空的问题(猜测可能出现，所以添加此代码，用于抛出异常，证明猜测)
+    if (buffer.length == 0 || readLength == 0) {
+      throw new BufferEmptyException("buffer len:" + buffer.length + ",readLength:" + readLength);
     }
 
     int read;
