@@ -40,8 +40,9 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
     //IJKPlayer
     api 'tv.danmaku.ijk.media:ijkplayer-java:0.8.8'
+    implementation fileTree(dir: 'libs\\aar', include: ['*.aar', '*.jar'], exclude: [])
     //源码使用的2.9.2(因为经测试发现,Exo 2.9.3以上版本，针对某些版本，无法进行seek)
-    implementation project(path: ':ffmpeg')
-    implementation project(path: ':core')
-    implementation project(path: ':hls')
+//    implementation project(path: ':ffmpeg')
+//    implementation project(path: ':core')
+//    implementation project(path: ':hls')
 }
