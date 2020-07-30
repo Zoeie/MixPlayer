@@ -200,8 +200,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }, PlayConstant.EXO_PLAYER, new PlayConfigure(surfaceView, 1, true));
         List<String> subtitleList = new ArrayList<>();
-        subtitleList.add("http://img.lemmovie.com/sub/惊天营救_ftf.srt");
-        subtitleList.add("http://img.lemmovie.com/sub/惊天营救_rw.srt");
         SourceConfigure configure = new SourceConfigure(VIDEO_URL, subtitleList);
         //SourceConfigure configure = new SourceConfigure(VIDEO_URL/*,null,"127.0.0.1",9050,Proxy.Type.SOCKS*/);
         //configure.setStartPosition(100 * 1000);
