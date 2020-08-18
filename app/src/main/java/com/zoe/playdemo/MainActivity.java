@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private boolean flag;
     private RelativeLayout rlMain;
     private float speed = 1;
-    private static final String VIDEO_URL = "/sdcard/惊天营救.Extraction.2020.HD720P.X264.AAC.English.CHS-ENG.Mp4Ba.mp4";//普通点播
+    private static final String VIDEO_URL = "http://vod.lemmovie.com/vod/530517ec-1c6f-9966-2f74-e862c77f887d.m3u8";//普通点播
     private MySeekBar seekBar;
     private TextView            tvPassTime;
     private TextView            tvBufferTime;
