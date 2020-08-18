@@ -106,4 +106,21 @@ public class MainActivity2 extends AppCompatActivity {
         surfaceView.setLayoutParams(params);
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        iPlayer.pause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        iPlayer.start();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        iPlayer.release();
+    }
 }
