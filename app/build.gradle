@@ -36,4 +36,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
     implementation project(':player')
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-beta-2'
+    implementation 'com.google.android.exoplayer:exoplayer-ui:2.9.2'
 }
