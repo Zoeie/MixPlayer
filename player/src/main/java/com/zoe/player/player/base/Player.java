@@ -57,4 +57,6 @@ public interface Player {
     void switchSpeed(float speed);
 
     default void setUserAgent(String userAgent) {}
+
+    default void setVolume(float audioVolume){}
 }

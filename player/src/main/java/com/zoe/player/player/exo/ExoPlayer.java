@@ -458,6 +458,13 @@ public class ExoPlayer implements Player {
     }
 
     @Override
+    public void setVolume(float audioVolume) {
+        if (exoPlayer != null) {
+            exoPlayer.setVolume(audioVolume);
+        }
+    }
+
+    @Override
     public void switchSpeed(float speed) {
         if(exoPlayer != null) {
             exoPlayer.setPlaybackParameters(new PlaybackParameters(speed));
