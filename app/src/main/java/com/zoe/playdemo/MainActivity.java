@@ -1,13 +1,13 @@
 package com.zoe.playdemo;
 
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.KeyEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -26,10 +26,7 @@ import com.zoe.player.player.base.Player;
 import com.zoe.player.player.base.SourceConfigure;
 import com.zoe.player.player.base.SubtitleData;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.Formatter;
-import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -39,14 +36,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private boolean flag;
     private RelativeLayout rlMain;
     private float speed = 1;
-    private static final String VIDEO_URL = "http://vod.lemmovie.com/vod/530517ec-1c6f-9966-2f74-e862c77f887d.m3u8";//普通点播
+    private static final String VIDEO_URL = "http://vod2.lemmovie.com/vod/d2d0ebad-ebdf-0ce4-68da-80c7cfbb4f39.m3u8";//普通点播
     private MySeekBar seekBar;
-    private TextView            tvPassTime;
-    private TextView            tvBufferTime;
-    private boolean             isDragging;
+    private TextView tvPassTime;
+    private TextView tvBufferTime;
+    private boolean isDragging;
+    private EditText etPath;
     private TextView tvDuration;
     private String[] mPaths;
-    private int pathIndex=0;
+    private int pathIndex = 0;
     private ProgressBar mPb;
 
     @Override
@@ -60,6 +58,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tvPassTime = findViewById(R.id.tv_pass_time);
         tvBufferTime = findViewById(R.id.tv_buffer_time);
         tvDuration = findViewById(R.id.tv_duration);
+        etPath = findViewById(R.id.et_path);
+        etPath.setText(VIDEO_URL);
 
         Button btnSwitch = findViewById(R.id.btn_screen_switch);
         btnSwitch.setOnClickListener(this);
@@ -70,12 +70,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button btnSpeed = findViewById(R.id.btn_speed_switch);
         btnSpeed.setOnClickListener(this);
 
-        Button btnPlay = findViewById(R.id.btn_pause);
-        btnPlay.setOnClickListener(this);
+        Button btnPause = findViewById(R.id.btn_pause);
+        btnPause.setOnClickListener(this);
 
         Button btnChange = findViewById(R.id.change_source);
         btnChange.setOnClickListener(this);
 
+        Button btnPlay = findViewById(R.id.btn_play);
+        btnPlay.setOnClickListener(this);
+        btnPlay.requestFocus();
         mPb = findViewById(R.id.pb);
         seekBar = findViewById(R.id.sb_progress);
         seekBar.setOnKeyListener(new View.OnKeyListener() {
@@ -95,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             int duration = (int) iPlayer.getDuration();
                             long seekPos = (long) (progress * (1.0f) / 100 * iPlayer.getDuration());
                             iPlayer.seekTo(seekPos);
-                            LogUtil.i("duration:"+duration+",seekPos:"+seekPos);
+                            LogUtil.i("duration:" + duration + ",seekPos:" + seekPos);
                         }
                         break;
                 }
@@ -118,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 int progress = seekBar.getProgress();
                 int duration = (int) iPlayer.getDuration();
                 long seekPos = (long) (progress * (1.0f) / 100 * iPlayer.getDuration());
-                LogUtil.i("duration:"+duration+",seekPos:"+seekPos);
+                LogUtil.i("duration:" + duration + ",seekPos:" + seekPos);
                 iPlayer.seekTo(seekPos);
             }
         });
@@ -152,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onBufferingEnd() {
                 mPb.setVisibility(View.INVISIBLE);
-                LogUtil.d("onBufferingEnd time:"+(System.currentTimeMillis() - bufferTime));
+                LogUtil.d("onBufferingEnd time:" + (System.currentTimeMillis() - bufferTime));
             }
 
             @Override
@@ -162,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onProgress() {
-                if(isDragging) return;
+                if (isDragging) return;
                 long currentPos = iPlayer.getCurrentPosition();
                 long bufferedPos = iPlayer.getBufferedPosition();
                 long duration = iPlayer.getDuration();
@@ -182,15 +185,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onPlayError(Exception e, int errorCode) {
-                LogUtil.e("onPlayError："+e.getMessage()+",errorCode:"+errorCode);
+                LogUtil.e("onPlayError：" + e.getMessage() + ",errorCode:" + errorCode);
             }
 
             @Override
             public void onSubtitleChanged(SubtitleData subtitle) {
-                if(subtitle == null) {
-                    LogUtil.d("onSubtitleChanged:"  + null);
+                if (subtitle == null) {
+                    LogUtil.d("onSubtitleChanged:" + null);
                 } else {
-                    LogUtil.d("onSubtitleChanged："+subtitle.getContent());
+                    LogUtil.d("onSubtitleChanged：" + subtitle.getContent());
                 }
             }
 
@@ -199,11 +202,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         }, PlayConstant.EXO_PLAYER, new PlayConfigure(surfaceView, 1, true));
-        List<String> subtitleList = new ArrayList<>();
-        SourceConfigure configure = new SourceConfigure(VIDEO_URL, subtitleList);
-        //SourceConfigure configure = new SourceConfigure(VIDEO_URL/*,null,"127.0.0.1",9050,Proxy.Type.SOCKS*/);
-        //configure.setStartPosition(100 * 1000);
-        iPlayer.play(configure);
     }
 
     @Override
@@ -231,7 +229,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 switchScreen();
                 break;
             case R.id.btn_pause:
-                if(iPlayer.isPlaying()) {
+                if (iPlayer.isPlaying()) {
                     iPlayer.pause();
                 } else {
                     iPlayer.start();
@@ -242,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btn_speed_switch:
                 speed += 0.5f;
-                if(speed > 6) {
+                if (speed > 6) {
                     speed = 1;
                 }
                 LogUtil.d("speed is :" + speed);
@@ -250,10 +248,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.change_source:
                 pathIndex++;
-                pathIndex%=mPaths.length;
+                pathIndex %= mPaths.length;
                 iPlayer.play(new SourceConfigure(mPaths[pathIndex]));
                 break;
+            case R.id.btn_play:
+                startPlay();
+                break;
         }
+    }
+
+    private void startPlay() {
+        String path = etPath.getText().toString();
+        SourceConfigure configure = new SourceConfigure(path, null);
+        //SourceConfigure configure = new SourceConfigure(VIDEO_URL/*,null,"127.0.0.1",9050,Proxy.Type.SOCKS*/);
+        //configure.setStartPosition(100 * 1000);
+        iPlayer.play(configure);
     }
 
     private void switchScreen() {
@@ -267,7 +276,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onBackPressed() {
-        if(flag) {
+        if (flag) {
             switchScreen();
         } else {
             super.onBackPressed();
@@ -292,7 +301,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void exitFullScreen1() {
-        RelativeLayout.LayoutParams params  = (RelativeLayout.LayoutParams) surfaceView.getLayoutParams();
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) surfaceView.getLayoutParams();
         params.width = (int) getResources().getDimension(R.dimen.dpi_480);
         params.height = (int) getResources().getDimension(R.dimen.dpi_270);
         surfaceView.setLayoutParams(params);

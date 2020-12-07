@@ -1,94 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rl_main"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rl_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/btn_screen_switch"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="测试播放器，小屏-大屏切换"/>
+        android:orientation="horizontal">
 
-    <Button
-        android:layout_below="@id/btn_screen_switch"
-        android:id="@+id/btn_subtitle_switch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="测试字幕切换"/>
+        <EditText
+            android:id="@+id/et_path"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
 
-    <Button
-        android:layout_below="@id/btn_subtitle_switch"
-        android:id="@+id/btn_speed_switch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="测试切换倍速"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dpi_40"
+            android:layout_marginEnd="@dimen/dpi_40"
+            android:orientation="vertical">
 
-    <Button
-        android:layout_below="@id/btn_speed_switch"
-        android:id="@+id/btn_pause"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:text="暂停/播放" />
+            <Button
+                android:id="@+id/btn_play"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="播放" />
 
-    <Button
-        android:id="@+id/change_source"
-        android:layout_below="@+id/btn_pause"
-        android:text="切换资源"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+            <Button
+                android:id="@+id/btn_screen_switch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="小屏-大屏切换" />
+
+            <Button
+                android:id="@+id/btn_subtitle_switch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="字幕切换" />
+
+            <Button
+                android:id="@+id/btn_speed_switch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="倍速切换" />
+
+            <Button
+                android:id="@+id/btn_pause"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="暂停/恢复" />
+
+            <Button
+                android:id="@+id/change_source"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="资源切换" />
+        </LinearLayout>
+
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-            android:layout_below="@+id/change_source"
         android:layout_height="match_parent">
+
         <SurfaceView
-            android:layout_centerInParent="true"
             android:id="@+id/surface_view"
             android:layout_width="480dp"
-            android:layout_height="270dp" />
+            android:layout_height="270dp"
+            android:layout_centerInParent="true" />
 
         <ProgressBar
             android:id="@+id/pb"
-            android:visibility="invisible"
-            android:layout_centerInParent="true"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="invisible" />
     </RelativeLayout>
 
 
-
     <TextView
-        android:layout_marginStart="@dimen/dpi_20"
-        android:textSize="@dimen/spi_20"
         android:id="@+id/tv_pass_time"
-        android:textColor="@android:color/black"
-        android:layout_alignParentBottom="true"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:layout_toEndOf="@id/tv_pass_time"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_marginStart="@dimen/dpi_20"
-        android:textSize="@dimen/spi_20"
-        android:id="@+id/tv_buffer_time"
         android:textColor="@android:color/black"
-        android:layout_alignParentBottom="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:textSize="@dimen/spi_20" />
 
     <TextView
-        android:layout_marginEnd="@dimen/dpi_20"
-        android:textSize="@dimen/spi_20"
-        android:id="@+id/tv_duration"
-        android:textColor="@android:color/black"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
+        android:id="@+id/tv_buffer_time"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="@dimen/dpi_20"
+        android:layout_toEndOf="@id/tv_pass_time"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/spi_20" />
+
+    <TextView
+        android:id="@+id/tv_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="@dimen/dpi_20"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/spi_20" />
 
     <LinearLayout
         android:layout_width="match_parent"
