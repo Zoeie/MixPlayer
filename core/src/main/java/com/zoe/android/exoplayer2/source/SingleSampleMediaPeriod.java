@@ -15,6 +15,8 @@
  */
 package com.zoe.android.exoplayer2.source;
 
+import android.text.TextUtils;
+
 import androidx.annotation.Nullable;
 import com.zoe.android.exoplayer2.C;
 import com.zoe.android.exoplayer2.Format;
@@ -24,10 +26,12 @@ import com.zoe.android.exoplayer2.decoder.DecoderInputBuffer;
 import com.zoe.android.exoplayer2.trackselection.TrackSelection;
 import com.zoe.android.exoplayer2.upstream.DataSource;
 import com.zoe.android.exoplayer2.upstream.DataSpec;
+import com.zoe.android.exoplayer2.upstream.DefaultLoadErrorHandlingPolicy;
 import com.zoe.android.exoplayer2.upstream.LoadErrorHandlingPolicy;
 import com.zoe.android.exoplayer2.upstream.Loader;
 import com.zoe.android.exoplayer2.upstream.StatsDataSource;
 import com.zoe.android.exoplayer2.upstream.TransferListener;
+import com.zoe.android.exoplayer2.util.Log;
 import com.zoe.android.exoplayer2.util.MimeTypes;
 import com.zoe.android.exoplayer2.util.Util;
 
@@ -257,7 +261,11 @@ import java.util.Arrays;
                 >= loadErrorHandlingPolicy.getMinimumLoadableRetryCount(C.DATA_TYPE_MEDIA);
 
     Loader.LoadErrorAction action;
-    if (treatLoadErrorsAsEndOfStream && errorCanBePropagated) {
+    if ((treatLoadErrorsAsEndOfStream && errorCanBePropagated)
+            || (!TextUtils.isEmpty(error.getMessage()) && error.getMessage().contains(".srt")
+            && error.getMessage().contains("404")
+            && errorCount >= DefaultLoadErrorHandlingPolicy.DEFAULT_MIN_LOADABLE_RETRY_COUNT + 1)/*当检测到错误为加载字幕所产生的，就不加载字幕了*/) {
+      Log.e("SingleSampleMediaPeriod", "srt file download failed, errorCount is " + errorCount + ", and forced end of load");
       loadingFinished = true;
       action = Loader.DONT_RETRY;
     } else {

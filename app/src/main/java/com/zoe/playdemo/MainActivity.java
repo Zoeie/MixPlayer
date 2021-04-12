@@ -26,7 +26,9 @@ import com.zoe.player.player.base.Player;
 import com.zoe.player.player.base.SourceConfigure;
 import com.zoe.player.player.base.SubtitleData;
 
+import java.util.ArrayList;
 import java.util.Formatter;
+import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -36,7 +38,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private boolean flag;
     private RelativeLayout rlMain;
     private float speed = 1;
-    private static final String VIDEO_URL = "http://vod2.lemmovie.com/vod/d2d0ebad-ebdf-0ce4-68da-80c7cfbb4f39.m3u8";//普通点播
+    private static final String VIDEO_URL = "http://vod2.lemmovie.com/vod/50d9078c-1580-d7ae-f9b9-fd8d99a55392.m3u8";//普通点播
+    private static final String SUBTITLE_URL1 = "http://img.lemmovie.com/sub/1_cnen.srt";//普通点播
+    private static final String SUBTITLE_URL2 = "http://img.lemmovie.com/sub/seal.team.s04e01_my.srt";//普通点播
     private MySeekBar seekBar;
     private TextView tvPassTime;
     private TextView tvBufferTime;
@@ -259,7 +263,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void startPlay() {
         String path = etPath.getText().toString();
-        SourceConfigure configure = new SourceConfigure(path, null);
+        List<String> subtitleList = new ArrayList<>();
+        subtitleList.add(SUBTITLE_URL1);
+        SourceConfigure configure = new SourceConfigure(path, subtitleList);
         //SourceConfigure configure = new SourceConfigure(VIDEO_URL/*,null,"127.0.0.1",9050,Proxy.Type.SOCKS*/);
         //configure.setStartPosition(100 * 1000);
         iPlayer.play(configure);
