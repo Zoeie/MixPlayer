@@ -38,7 +38,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private boolean flag;
     private RelativeLayout rlMain;
     private float speed = 1;
-    private static final String VIDEO_URL = "http://vod2.lemmovie.com/vod/50d9078c-1580-d7ae-f9b9-fd8d99a55392.m3u8";//普通点播
+    private static final String VIDEO_URL = "https://r4---sn-i3belney.googlevideo.com/videoplayback?expire=1625575014&ei=BvrjYKjkDYivgAOvnZ6ADw&ip=103.243.94.251&id=o-AGEJ_G0McJHPFDq_PJMnJnK4thPaARDMBCATBzVonvc6&itag=137&aitags=133%2C134%2C135%2C136%2C137%2C160%2C242%2C243%2C244%2C247%2C248%2C278&source=youtube&requiressl=yes&mh=bO&mm=31%2C26&mn=sn-i3belney%2Csn-5uaezn6y&ms=au%2Conr&mv=m&mvi=4&pl=24&pcm2=yes&initcwndbps=1270000&vprv=1&mime=video%2Fmp4&ns=kGIW4MnkOXUFuiGNEBKZIAYG&gir=yes&clen=75696792&dur=186.019&lmt=1617411458598186&mt=1625553161&fvip=4&keepalive=yes&fexp=24001373%2C24007246&c=WEB&txp=6316222&n=UmzRYLh9LueOEK&sparams=expire%2Cei%2Cip%2Cid%2Caitags%2Csource%2Crequiressl%2Cpcm2%2Cvprv%2Cmime%2Cns%2Cgir%2Cclen%2Cdur%2Clmt&sig=AOq0QJ8wRAIgfyKULW5m59m2Q1g2fgNlctuQi8kBiauhn7wJ5LLFDrUCIDtdu6e07AQIvF-5D_L7qeJQSK5UJrTh5Io_oaOWpHKZ&lsparams=mh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpl%2Cinitcwndbps&lsig=AG3C_xAwRgIhAIFrgRITpBrpc11Xrve8T60JG0-e8uJsqxAMuKrN7IFZAiEA70v19C-zs6qmfmf_jCL8KVcTRc28Vm7lKVz0WkMpCxA%3D&ratebypass=yes";//视频地址
+    private static final String AUDIO_URL = "https://r4---sn-i3belney.googlevideo.com/videoplayback?expire=1625575014&ei=BvrjYKjkDYivgAOvnZ6ADw&ip=103.243.94.251&id=o-AGEJ_G0McJHPFDq_PJMnJnK4thPaARDMBCATBzVonvc6&itag=251&source=youtube&requiressl=yes&mh=bO&mm=31%2C26&mn=sn-i3belney%2Csn-5uaezn6y&ms=au%2Conr&mv=m&mvi=4&pl=24&pcm2=yes&initcwndbps=1270000&vprv=1&mime=audio%2Fwebm&ns=kGIW4MnkOXUFuiGNEBKZIAYG&gir=yes&clen=2853478&dur=186.041&lmt=1617411396036170&mt=1625553161&fvip=4&keepalive=yes&fexp=24001373%2C24007246&c=WEB&txp=6311222&n=UmzRYLh9LueOEK&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cpcm2%2Cvprv%2Cmime%2Cns%2Cgir%2Cclen%2Cdur%2Clmt&sig=AOq0QJ8wRQIge4iqv8-NCJZOzYsYGSKe_f08Z2-LSA7ftnHHGCze1dACIQDDVCwIFCcQQt0xAOeaKkuNryWlUnw044WECL1chZXSMA%3D%3D&lsparams=mh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpl%2Cinitcwndbps&lsig=AG3C_xAwRgIhAIFrgRITpBrpc11Xrve8T60JG0-e8uJsqxAMuKrN7IFZAiEA70v19C-zs6qmfmf_jCL8KVcTRc28Vm7lKVz0WkMpCxA%3D&ratebypass=yes";//音频地址
     private static final String SUBTITLE_URL1 = "http://img.lemmovie.com/sub/1_cnen.srt";//普通点播
     private static final String SUBTITLE_URL2 = "http://img.lemmovie.com/sub/seal.team.s04e01_my.srt";//普通点播
     private MySeekBar seekBar;
@@ -263,9 +264,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void startPlay() {
         String path = etPath.getText().toString();
-        List<String> subtitleList = new ArrayList<>();
-        subtitleList.add(SUBTITLE_URL1);
-        SourceConfigure configure = new SourceConfigure(path, subtitleList);
+//        List<String> subtitleList = new ArrayList<>();
+//        subtitleList.add(SUBTITLE_URL1);
+        List<String> mediaList = new ArrayList<>();
+        mediaList.add(VIDEO_URL);
+        mediaList.add(AUDIO_URL);
+        SourceConfigure configure = new SourceConfigure(mediaList);
         //SourceConfigure configure = new SourceConfigure(VIDEO_URL/*,null,"127.0.0.1",9050,Proxy.Type.SOCKS*/);
         //configure.setStartPosition(100 * 1000);
         iPlayer.play(configure);

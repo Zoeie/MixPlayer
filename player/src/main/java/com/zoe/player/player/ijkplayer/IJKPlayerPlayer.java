@@ -274,8 +274,8 @@ public class IJKPlayerPlayer implements Player, SurfaceHolder.Callback, Subtitle
 
     @Override
     public void play(SourceConfigure configure) {
-        if (configure == null || TextUtils.isEmpty(configure.getPlayUrl())) {
-            Log.e(TAG, "播放配置不能为空");
+        if (configure == null || configure.getMediaUrlList().size() <= 0) {
+            Log.e(TAG, "至少需要有一个播放的媒体资源");
             return;
         }
         if (mPlayListener != null) {
@@ -288,7 +288,7 @@ public class IJKPlayerPlayer implements Player, SurfaceHolder.Callback, Subtitle
             if(mHolder != null) {
                 ijkMediaPlayer.setDisplay(mHolder);
             }
-            ijkMediaPlayer.setDataSource(mContext, Uri.parse(configure.getPlayUrl()));
+            ijkMediaPlayer.setDataSource(mContext, Uri.parse(configure.getMediaUrlList().get(0)));
         } catch (IOException e) {
             e.printStackTrace();
         }

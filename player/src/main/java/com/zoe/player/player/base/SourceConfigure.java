@@ -1,6 +1,7 @@
 package com.zoe.player.player.base;
 
 import java.net.Proxy;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,9 +13,9 @@ public class SourceConfigure {
 
     private boolean cache;//是否需要本地缓存
 
-    private String playUrl;//当前的播放链接
+    private final List<String> mediaUrlList = new ArrayList<>();//媒体资源播放链接合集
 
-    private List<String> subtitleList;//字幕链接
+    private final List<String> subtitleList = new ArrayList<>();//字幕链接
 
     /**
      * 是否设置代理
@@ -43,13 +44,18 @@ public class SourceConfigure {
     private int startPosition = 0;
 
     public SourceConfigure(String playUrl) {
-        this.playUrl = playUrl;
+        this.mediaUrlList.add(playUrl);
+        this.setProxy = false;
+    }
+
+    public SourceConfigure(List<String> mediaUrlList) {
+        this.mediaUrlList.addAll(mediaUrlList);
         this.setProxy = false;
     }
 
     public SourceConfigure(String playUrl, List<String> subtitleList, String proxyUrl, int proxyPort, Proxy.Type proxyType) {
-        this.playUrl = playUrl;
-        this.subtitleList = subtitleList;
+        this.mediaUrlList.add(playUrl);
+        this.subtitleList.addAll(subtitleList);
         this.proxyUrl = proxyUrl;
         this.proxyPort = proxyPort;
         this.proxyType = proxyType;
@@ -57,18 +63,14 @@ public class SourceConfigure {
     }
 
     public SourceConfigure(String playUrl, List<String> subtitleList) {
-        this.playUrl = playUrl;
-        this.subtitleList = subtitleList;
+        this.mediaUrlList.add(playUrl);
+        this.subtitleList.addAll(subtitleList);
     }
 
     public SourceConfigure(boolean cache, String playUrl, List<String> subtitleList) {
         this.cache = cache;
-        this.playUrl = playUrl;
-        this.subtitleList = subtitleList;
-    }
-
-    public String getPlayUrl() {
-        return playUrl;
+        this.mediaUrlList.add(playUrl);
+        this.subtitleList.addAll(subtitleList);
     }
 
     public List<String> getSubtitleList() {
@@ -77,10 +79,6 @@ public class SourceConfigure {
 
     public boolean isCache() {
         return cache;
-    }
-
-    public void setPlayUrl(String playUrl) {
-        this.playUrl = playUrl;
     }
 
     public void setStartPosition(int startPosition) {
@@ -105,5 +103,9 @@ public class SourceConfigure {
 
     public Proxy.Type getProxyType() {
         return proxyType;
+    }
+
+    public List<String> getMediaUrlList() {
+        return mediaUrlList;
     }
 }

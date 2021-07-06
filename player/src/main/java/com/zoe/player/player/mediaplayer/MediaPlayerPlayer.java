@@ -5,6 +5,7 @@ import android.media.AudioManager;
 import android.media.MediaFormat;
 import android.media.MediaPlayer;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
@@ -47,7 +48,7 @@ public class MediaPlayerPlayer implements Player, SurfaceHolder.Callback, MediaP
         mContext = context;
         mPlayListener = playListener;
         mConfigure = mediaPlayerPlayerConfigure;
-        mHandler = new Handler(){
+        mHandler = new Handler(Looper.myLooper()){
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
@@ -111,8 +112,8 @@ public class MediaPlayerPlayer implements Player, SurfaceHolder.Callback, MediaP
 
     @Override
     public void play(SourceConfigure configure) {
-        if (configure == null || TextUtils.isEmpty(configure.getPlayUrl())) {
-            Log.e(TAG, "播放配置不能为空");
+        if (configure == null || configure.getMediaUrlList().size() <= 0) {
+            Log.e(TAG, "至少需要有一个播放的媒体资源");
             return;
         }
         mSourceConfigure = configure;
@@ -122,7 +123,7 @@ public class MediaPlayerPlayer implements Player, SurfaceHolder.Callback, MediaP
         mMediaPlayer.reset();
         try {
             startTimeOutBuffer();
-            mMediaPlayer.setDataSource(configure.getPlayUrl());
+            mMediaPlayer.setDataSource(configure.getMediaUrlList().get(0));
             mMediaPlayer.prepareAsync();
         } catch (IOException e) {
             e.printStackTrace();

@@ -37,13 +37,10 @@ import com.zoe.player.player.base.PlayListener;
 import com.zoe.player.player.base.Player;
 import com.zoe.player.player.base.SourceConfigure;
 import com.zoe.player.player.base.SubtitleData;
-import com.zoe.player.player.exo.cache.CacheManager;
 import com.zoe.player.player.exo.error.MyLoadErrorHandlingPolicy;
-import com.zoe.player.player.exo.factory.CacheDataSourceFactory;
 import com.zoe.player.player.exo.factory.CustomDataSourceFactory;
 import com.zoe.player.player.module.VideoFormat;
 
-import java.io.File;
 import java.util.List;
 
 /**
@@ -97,8 +94,8 @@ public class ExoPlayer implements Player {
 
     @Override
     public void play(SourceConfigure configure) {
-        if(configure == null || TextUtils.isEmpty(configure.getPlayUrl())) {
-            Log.e(TAG, "播放配置不能为空");
+        if (configure == null || configure.getMediaUrlList().size() == 0) {
+            Log.e(TAG, "至少需要有一个播放的媒体资源");
             return;
         }
         mCurrentPlayInfo = configure;
@@ -117,49 +114,44 @@ public class ExoPlayer implements Player {
     }
 
     private MediaSource getMediaSource(SourceConfigure configure) {
-        String playUrl=configure.getPlayUrl();
+        //添加媒体资源
+        List<String> mediaList = configure.getMediaUrlList();
+        //添加字幕
         List<String> subtitleList = configure.getSubtitleList();
+        Log.d(TAG, "media size:" + mediaList.size() + ",subtitle size:" + subtitleList.size());
+        MediaSource[] mediaSources = new MediaSource[mediaList.size() + subtitleList.size()];
+        for (int i = 0; i < mediaList.size(); i++) {
+            mediaSources[i] = getMediaSource(mediaList.get(i), configure);
+        }
+        for (int i = 0; i < subtitleList.size(); i++) {
+            mediaSources[i + mediaList.size()] = getSubtitleSource(subtitleList.get(i));
+        }
+        return new MergingMediaSource(mediaSources);
+    }
+
+    private MediaSource getMediaSource(String mediaUrl, SourceConfigure configure) {
         MediaSource mediaSource;
-        int contentType = inferContentType(playUrl);
+        int contentType = inferContentType(mediaUrl);
         DataSource.Factory factory;
-        if(configure.isCache()) {
-            CacheManager cacheManager = CacheManager.getInstance(mContext, configure.getPlayUrl(),new File(DEFAULT_CACHE_PATH));
-            factory = new CacheDataSourceFactory(mContext, MAX_FILE_SIZE, cacheManager.getCache());
-        } else {
-            //测量播放过程中的带宽。 如果不需要，可以为null。
-            DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-            if(contentType == C.TYPE_HLS) {
-                if(configure.setProxy) {
-                    factory = new CustomDataSourceFactory(mContext,userAgent,bandwidthMeter,
-                            configure.proxyUrl, configure.proxyPort, configure.proxyType);
-                } else {
-                    //针对HLS，自定义ts地址的加密以及解密
-                    factory = new CustomDataSourceFactory(mContext, userAgent, bandwidthMeter);
-                }
+        //测量播放过程中的带宽。 如果不需要，可以为null。
+        DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+        if (contentType == C.TYPE_HLS) {
+            if (configure.setProxy) {
+                factory = new CustomDataSourceFactory(mContext, userAgent, bandwidthMeter,
+                        configure.proxyUrl, configure.proxyPort, configure.proxyType);
             } else {
-                //非HLS，使用默认的Exo原生资源工厂
-                factory = new DefaultDataSourceFactory(mContext, userAgent, bandwidthMeter);
+                factory = new CustomDataSourceFactory(mContext, userAgent, bandwidthMeter);//针对HLS，自定义ts地址的加密以及解密
             }
+        } else {
+            factory = new DefaultDataSourceFactory(mContext, userAgent, bandwidthMeter);//非HLS，使用默认的Exo原生资源工厂
         }
-        switch (contentType) {
-            case C.TYPE_HLS:
-                mediaSource = new HlsMediaSource.Factory(factory).setLoadErrorHandlingPolicy(new MyLoadErrorHandlingPolicy())
-                        .createMediaSource(Uri.parse(playUrl));
-                break;
-            case C.TYPE_OTHER:
-            default:
-                mediaSource = new ExtractorMediaSource.Factory(factory)
-                        .setExtractorsFactory(new DefaultExtractorsFactory())
-                        .createMediaSource(Uri.parse(playUrl));
-                break;
-        }
-        if(subtitleList != null && subtitleList.size() > 0) {
-            MediaSource[] subSources = new MediaSource[subtitleList.size() + 1];
-            subSources[0] = mediaSource;
-            for (int i = 0; i < subtitleList.size(); i++) {
-                subSources[1 + i] = getMediaSource(subtitleList.get(i));
-            }
-            return new MergingMediaSource(subSources);
+        if (contentType == C.TYPE_HLS) {
+            mediaSource = new HlsMediaSource.Factory(factory).setLoadErrorHandlingPolicy(new MyLoadErrorHandlingPolicy())
+                    .createMediaSource(Uri.parse(mediaUrl));
+        } else {
+            mediaSource = new ExtractorMediaSource.Factory(factory)
+                    .setExtractorsFactory(new DefaultExtractorsFactory())
+                    .createMediaSource(Uri.parse(mediaUrl));
         }
         return mediaSource;
     }
@@ -180,7 +172,7 @@ public class ExoPlayer implements Player {
     }
 
     @NonNull
-    private MediaSource getMediaSource(String subtitleUrl) {
+    private MediaSource getSubtitleSource(String subtitleUrl) {
         String mimeType;
         if (subtitleUrl.endsWith(".srt")) {
             mimeType = MimeTypes.APPLICATION_SUBRIP;
@@ -212,7 +204,7 @@ public class ExoPlayer implements Player {
         return subtitleUrl.substring(startIndex, endIndex);//截取拓展名前面最后的两个字符，作为字幕的语言
     }
 
-    private TextOutput mOutput = new TextOutput() {
+    private final TextOutput mOutput = new TextOutput() {
         @Override
         public void onCues(List<Cue> cues) {
             if (cues != null && cues.size() > 0) {
@@ -232,7 +224,7 @@ public class ExoPlayer implements Player {
         }
     };
 
-    private VideoListener videoListener = new VideoListener() {
+    private final VideoListener videoListener = new VideoListener() {
         @Override
         public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
             if(mPlayListener != null) {
@@ -246,7 +238,7 @@ public class ExoPlayer implements Player {
         }
     };
 
-    private com.zoe.android.exoplayer2.Player.EventListener eventListener = new com.zoe.android.exoplayer2.Player.EventListener() {
+    private final com.zoe.android.exoplayer2.Player.EventListener eventListener = new com.zoe.android.exoplayer2.Player.EventListener() {
 
         @Override
         public void onTimelineChanged(Timeline timeline, @Nullable Object manifest, int reason) {
